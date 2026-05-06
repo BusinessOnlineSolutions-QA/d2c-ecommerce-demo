@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOS Center — D2C Admin Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#f0f2f7;
+  --surface:#ffffff;
+  --surface2:#f7f8fc;
+  --surface3:#eef0f7;
+  --border:#e2e6f0;
+  --border2:#c9d0e4;
+  --text:#0d1117;
+  --text2:#3d4a5c;
+  --text3:#8492a6;
+  --accent:#1d4ed8;
+  --accent-l:#eff4ff;
+  --accent-d:#1e3a8a;
+  --green:#059669;--green-l:#ecfdf5;
+  --red:#dc2626;--red-l:#fef2f2;
+  --yellow:#d97706;--yellow-l:#fffbeb;
+  --purple:#7c3aed;--purple-l:#f5f3ff;
+  --cyan:#0891b2;--cyan-l:#ecfeff;
+  --pink:#db2777;--pink-l:#fdf2f8;
+  --orange:#ea580c;--orange-l:#fff7ed;
+  --teal:#0d9488;--teal-l:#f0fdfa;
+  --mono:'DM Mono',monospace;
+  --sans:'DM Sans',sans-serif;
+  --display:'Fraunces',serif;
+  --r:8px;--r2:12px;--r3:18px;
+  --sh:0 1px 3px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.04);
+  --sh2:0 8px 30px rgba(0,0,0,.10);
+  --sidebar-w:248px;
+  --topbar-h:58px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:13.5px;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;line-height:1.5;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+a{text-decoration:none;}
+.app{display:flex;height:100vh;overflow:hidden;}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);background:var(--text);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;overflow-x:hidden;position:relative;z-index:100;}
+.sb-logo{padding:16px 14px 12px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.sb-logo-mark{width:40px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:17px;font-weight:700;color:#fff;flex-shrink:0;letter-spacing:-1px;}
+.sb-logo-text{font-size:13.5px;font-weight:700;color:#fff;line-height:1.2;}
+.sb-logo-text small{display:block;font-size:9.5px;color:rgba(255,255,255,.38);font-weight:400;letter-spacing:.9px;text-transform:uppercase;margin-top:1px;}
+
+.sb-profile{margin:10px 10px 4px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:var(--r2);padding:12px;flex-shrink:0;}
+.sb-av{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:600;color:#fff;flex-shrink:0;}
+.sb-profile-row{display:flex;align-items:center;gap:10px;}
+.sb-name{font-size:12.5px;font-weight:700;color:#fff;}
+.sb-role{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.5px;margin-top:1px;}
+.sb-pulse{width:6px;height:6px;background:#22c55e;border-radius:50%;margin-left:auto;flex-shrink:0;box-shadow:0 0 6px #22c55e;}
+.sb-stats{display:flex;gap:0;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.07);}
+.pstat{flex:1;text-align:center;}
+.pstat-n{font-size:13px;font-weight:700;color:#fff;font-family:var(--mono);}
+.pstat-l{font-size:9.5px;color:rgba(255,255,255,.35);margin-top:1px;}
+
+nav{flex:1;padding:6px 0;}
+.nav-group{padding:0 8px;}
+.nav-label{font-size:9.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.28);padding:12px 8px 4px;}
+.nav-link{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r);cursor:pointer;color:rgba(255,255,255,.55);font-size:12.5px;font-weight:500;transition:all .15s;margin-bottom:1px;position:relative;}
+.nav-link:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.9);}
+.nav-link.active{background:rgba(29,78,216,.35);color:#fff;font-weight:600;}
+.nav-link.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--accent);border-radius:0 3px 3px 0;}
+.nav-link i{width:16px;text-align:center;font-size:12.5px;flex-shrink:0;opacity:.8;}
+.nav-link.active i{opacity:1;}
+.nbadge{margin-left:auto;font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:20px;font-family:var(--mono);}
+.nb-red{background:rgba(220,38,38,.25);color:#fca5a5;}
+.nb-blue{background:rgba(29,78,216,.25);color:#93c5fd;}
+.nb-yellow{background:rgba(217,119,6,.25);color:#fcd34d;}
+.nb-green{background:rgba(5,150,105,.25);color:#6ee7b7;}
+.nb-purple{background:rgba(124,58,237,.25);color:#c4b5fd;}
+
+.nav-sub{display:none;padding:2px 0 2px 24px;}
+.nav-sub.open{display:block;}
+.nav-sub-link{display:block;padding:6px 10px;border-radius:var(--r);color:rgba(255,255,255,.4);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;border-left:1px solid rgba(255,255,255,.1);margin-bottom:1px;}
+.nav-sub-link:hover{color:rgba(255,255,255,.8);border-color:rgba(255,255,255,.3);}
+.nav-sub-link.active{color:#93c5fd;border-color:var(--accent);}
+.chev{margin-left:auto;font-size:9px;color:rgba(255,255,255,.3);transition:transform .2s;}
+.has-sub.open .chev{transform:rotate(180deg);}
+
+.sb-footer{margin-top:auto;padding:10px 12px;border-top:1px solid rgba(255,255,255,.07);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
+.online-pill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;color:#22c55e;font-weight:600;}
+.online-pill::before{content:'';width:5px;height:5px;background:#22c55e;border-radius:50%;display:inline-block;}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);height:var(--topbar-h);padding:0 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:var(--sh);z-index:50;}
+.tb-left{display:flex;align-items:center;gap:14px;}
+.pg-title h2{font-size:15.5px;font-weight:700;color:var(--text);font-family:var(--display);}
+.pg-title p{font-size:11px;color:var(--text3);margin-top:1px;}
+.tb-right{display:flex;align-items:center;gap:7px;}
+.tb-search{display:flex;align-items:center;gap:7px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:7px 12px;width:220px;transition:all .2s;}
+.tb-search:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(29,78,216,.1);background:#fff;width:270px;}
+.tb-search i{color:var(--text3);font-size:11px;}
+.tb-search input{background:none;border:none;outline:none;color:var(--text);font-size:12px;font-family:var(--sans);width:100%;}
+.tb-search input::placeholder{color:var(--text3);}
+.tabs-row{display:flex;gap:2px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:3px;}
+.trtab{padding:4px 11px;border-radius:6px;font-size:11.5px;font-weight:500;color:var(--text3);cursor:pointer;transition:all .15s;}
+.trtab.active{background:var(--surface);color:var(--text);font-weight:600;box-shadow:var(--sh);}
+.icon-btn{width:33px;height:33px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);font-size:13px;position:relative;transition:all .15s;}
+.icon-btn:hover{border-color:var(--border2);color:var(--text);}
+.notif-dot{position:absolute;top:-3px;right:-3px;background:var(--red);color:#fff;font-size:8.5px;font-weight:700;width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--surface);}
+.tb-user{display:flex;align-items:center;gap:8px;padding:5px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;transition:all .15s;}
+.tb-user:hover{border-color:var(--border2);}
+.tb-uav{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;}
+.tb-uname{font-size:12px;font-weight:600;color:var(--text);}
+.tb-urole{font-size:10px;color:var(--text3);}
+
+/* SECTION NAV */
+.section-nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;display:flex;flex-shrink:0;overflow-x:auto;gap:0;}
+.snav-item{display:flex;align-items:center;gap:6px;padding:12px 14px;font-size:12px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;}
+.snav-item:hover{color:var(--text);}
+.snav-item.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600;}
+.snav-item i{font-size:12px;}
+.cnt-red{background:var(--red-l);color:var(--red);font-size:9.5px;font-weight:700;padding:1px 5px;border-radius:10px;font-family:var(--mono);}
+.cnt-blue{background:var(--accent-l);color:var(--accent);font-size:9.5px;font-weight:700;padding:1px 5px;border-radius:10px;font-family:var(--mono);}
+
+.content{flex:1;overflow-y:auto;padding:18px 20px;}
+.page-section{display:none;animation:fadeUp .25s ease;}
+.page-section.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* COMPONENTS */
+.alert{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-radius:var(--r);margin-bottom:16px;font-size:12.5px;}
+.alert-warning{background:var(--yellow-l);border-left:3px solid var(--yellow);color:#78350f;}
+.alert-info{background:var(--accent-l);border-left:3px solid var(--accent);color:#1e3a5f;}
+.alert-success{background:var(--green-l);border-left:3px solid var(--green);color:#064e3b;}
+.alert-danger{background:var(--red-l);border-left:3px solid var(--red);color:#7f1d1d;}
+.alert i{margin-top:1px;flex-shrink:0;}
+.al-link{color:var(--accent);font-weight:600;}
+
+/* KPI */
+.kpi-grid{display:grid;gap:12px;margin-bottom:16px;}
+.g4{grid-template-columns:repeat(4,1fr);}
+.g5{grid-template-columns:repeat(5,1fr);}
+.g6{grid-template-columns:repeat(6,1fr);}
+.g3c{grid-template-columns:repeat(3,1fr);}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px;box-shadow:var(--sh);transition:all .18s;cursor:pointer;position:relative;overflow:hidden;}
+.kpi:hover{transform:translateY(-2px);box-shadow:var(--sh2);}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--kpi-c,var(--accent));border-radius:var(--r2) var(--r2) 0 0;}
+.kpi-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.kpi-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;flex-shrink:0;}
+.kpi-trend{font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:20px;display:inline-flex;align-items:center;gap:3px;}
+.trend-up{background:var(--green-l);color:var(--green);}
+.trend-dn{background:var(--red-l);color:var(--red);}
+.trend-neu{background:var(--surface3);color:var(--text3);}
+.kpi-val{font-size:20px;font-weight:700;font-family:var(--mono);color:var(--text);margin-bottom:2px;letter-spacing:-.5px;}
+.kpi-lbl{font-size:11px;color:var(--text3);font-weight:500;}
+.kpi-sub{font-size:10px;color:var(--text3);margin-top:2px;}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);box-shadow:var(--sh);overflow:hidden;}
+.card-hd{padding:13px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;color:var(--text);}
+.card-title i{color:var(--accent);font-size:12px;}
+.card-body{padding:16px;}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+thead th{padding:9px 13px;text-align:left;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border);}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:#fafbfd;}
+td{padding:11px 13px;font-size:12.5px;color:var(--text2);vertical-align:middle;}
+td strong{color:var(--text);font-weight:600;}
+.txn-mono{font-family:var(--mono);font-size:10.5px;color:var(--text3);}
+
+/* BADGE */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:10.5px;font-weight:600;white-space:nowrap;}
+.badge::before{content:'';width:4px;height:4px;border-radius:50%;background:currentColor;display:inline-block;}
+.b-success{background:var(--green-l);color:var(--green);}
+.b-pending{background:var(--yellow-l);color:var(--yellow);}
+.b-failed,.b-cancelled,.b-rejected,.b-terminated{background:var(--red-l);color:var(--red);}
+.b-processing,.b-shipped,.b-active,.b-approved{background:var(--accent-l);color:var(--accent);}
+.b-inactive,.b-returned,.b-draft,.b-closed,.b-suspended{background:var(--surface3);color:var(--text3);}
+.b-delivered{background:#ecfdf5;color:#065f46;}
+.b-purple,.b-admin{background:var(--purple-l);color:var(--purple);}
+.b-orange{background:var(--orange-l);color:var(--orange);}
+.b-teal{background:var(--teal-l);color:var(--teal);}
+.b-info{background:var(--cyan-l);color:var(--cyan);}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:7px;border:none;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;font-family:var(--sans);white-space:nowrap;}
+.btn-sm{padding:5px 10px;font-size:11px;}
+.btn-xs{padding:3px 8px;font-size:10.5px;}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 2px 6px rgba(29,78,216,.25);}
+.btn-primary:hover{background:var(--accent-d);}
+.btn-ghost{background:var(--surface2);color:var(--text2);border:1px solid var(--border);}
+.btn-ghost:hover{border-color:var(--border2);color:var(--text);}
+.btn-danger{background:var(--red-l);color:var(--red);border:1px solid #fca5a5;}
+.btn-warning{background:var(--yellow-l);color:var(--yellow);border:1px solid #fcd34d;}
+.btn-success{background:var(--green-l);color:var(--green);border:1px solid #86efac;}
+.btn-purple{background:var(--purple-l);color:var(--purple);border:1px solid #c4b5fd;}
+.btn-orange{background:var(--orange-l);color:var(--orange);border:1px solid #fdba74;}
+
+/* GRID LAYOUTS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
+.g3-1{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px;}
+.g1-2{display:grid;grid-template-columns:1fr 2fr;gap:14px;margin-bottom:14px;}
+.g1-3{display:grid;grid-template-columns:1fr 3fr;gap:14px;margin-bottom:14px;}
+.mb14{margin-bottom:14px;}
+.mb0{margin-bottom:0;}
+
+/* PROGRESS */
+.pbar{height:5px;background:var(--surface3);border-radius:20px;overflow:hidden;margin-top:5px;}
+.pbar-fill{height:100%;border-radius:20px;}
+
+/* PRODUCT IMAGE */
+.prod-img{width:32px;height:32px;border-radius:6px;object-fit:cover;border:1px solid var(--border);}
+.prod-name-cell{display:flex;align-items:center;gap:9px;}
+
+/* USER AVATAR */
+.u-av{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:#fff;flex-shrink:0;}
+.u-av-lg{width:36px;height:36px;border-radius:9px;font-size:13px;}
+
+/* STARS */
+.stars{color:#f59e0b;letter-spacing:1px;font-size:11.5px;}
+
+/* ACTION GROUP */
+.act-grp{display:flex;gap:4px;}
+
+/* LIVE PILL */
+.live-pill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;color:var(--green);font-weight:600;}
+.live-pulse{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
+
+/* MINI SELECT */
+.mini-select{padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;font-size:11.5px;color:var(--text2);font-family:var(--sans);outline:none;cursor:pointer;}
+
+/* STAT ROW */
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);}
+.stat-row:last-child{border-bottom:none;}
+.stat-label{font-size:12px;color:var(--text2);}
+.stat-value{font-size:12.5px;font-weight:700;font-family:var(--mono);}
+
+/* DONUT LEGEND */
+.dl{display:flex;flex-direction:column;gap:8px;}
+.dl-row{display:flex;align-items:center;gap:7px;font-size:11.5px;}
+.dl-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0;}
+.dl-name{flex:1;color:var(--text2);}
+.dl-pct{font-weight:700;font-family:var(--mono);color:var(--text);}
+
+/* RECENT ORDER ROW */
+.ro{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+.ro:last-child{border-bottom:none;}
+.ro-img{width:38px;height:38px;border-radius:7px;object-fit:cover;border:1px solid var(--border);flex-shrink:0;}
+.ro-name{font-size:12px;font-weight:600;color:var(--text);}
+.ro-meta{font-size:10.5px;color:var(--text3);margin-top:1px;}
+.ro-price{font-size:12.5px;font-weight:700;font-family:var(--mono);color:var(--accent);}
+
+/* TOP ROW */
+.top-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.top-row:last-child{margin-bottom:0;}
+.top-icon{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;flex-shrink:0;}
+.top-name{flex:1;font-size:12px;font-weight:600;color:var(--text);}
+.top-val{font-size:12px;font-weight:700;font-family:var(--mono);white-space:nowrap;}
+.top-sub{font-size:10.5px;color:var(--text3);}
+
+/* INFO GRID */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.info-item{background:var(--surface2);border-radius:var(--r);padding:11px;border:1px solid var(--border);}
+.info-item-lbl{font-size:10px;color:var(--text3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;font-weight:600;}
+.info-item-val{font-size:15px;font-weight:700;font-family:var(--mono);color:var(--text);}
+.info-item-sub{font-size:10.5px;margin-top:2px;font-weight:600;}
+
+/* NOTIF PANEL */
+.notif-panel{position:fixed;top:var(--topbar-h);right:0;width:320px;background:var(--surface);border-left:1px solid var(--border);border-bottom:1px solid var(--border);box-shadow:var(--sh2);z-index:200;display:none;max-height:calc(100vh - var(--topbar-h));overflow-y:auto;animation:slideLeft .2s ease;}
+@keyframes slideLeft{from{opacity:0;transform:translateX(10px);}to{opacity:1;transform:translateX(0);}}
+.notif-panel.open{display:block;}
+.notif-hd{padding:13px 15px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.notif-hd h3{font-size:13px;font-weight:700;}
+.notif-item{display:flex;gap:10px;padding:12px 15px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s;}
+.notif-item:hover{background:var(--surface2);}
+.notif-item.unread{background:#fafeff;}
+.notif-ic{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.notif-txt h4{font-size:12px;font-weight:600;margin-bottom:2px;}
+.notif-txt p{font-size:11px;color:var(--text3);line-height:1.4;}
+.notif-time{font-size:10px;color:var(--text3);margin-top:2px;}
+.unread-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;flex-shrink:0;margin-top:4px;}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(3px);}
+.modal-overlay.open{display:flex;animation:fadeIn .15s ease;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r3);width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.18);animation:modalIn .22s ease;}
+.modal-lg{width:680px;}
+@keyframes modalIn{from{transform:translateY(12px) scale(.97);opacity:0;}to{transform:none;opacity:1;}}
+.modal-hd{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.modal-hd h3{font-size:14.5px;font-weight:700;}
+.modal-x{background:none;border:none;font-size:19px;cursor:pointer;color:var(--text3);line-height:1;}
+.modal-x:hover{color:var(--red);}
+.modal-body{padding:18px;}
+.modal-ft{padding:13px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:7px;}
+
+/* FORM */
+.fg{margin-bottom:13px;}
+.fg label{display:block;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:8px 11px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:12.5px;font-family:var(--sans);outline:none;transition:all .15s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(29,78,216,.1);background:#fff;}
+.fg input::placeholder{color:var(--text3);}
+.fg textarea{resize:vertical;min-height:75px;}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.fg-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+
+/* TIMELINE */
+.timeline{padding:2px 0;}
+.tl-item{display:flex;gap:11px;margin-bottom:13px;position:relative;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;color:#fff;position:relative;z-index:1;}
+.tl-item::before{content:'';position:absolute;left:13px;top:28px;bottom:-13px;width:2px;background:var(--border);z-index:0;}
+.tl-item:last-child::before{display:none;}
+.tl-body{flex:1;padding-top:3px;}
+.tl-title{font-size:12px;font-weight:600;color:var(--text);}
+.tl-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+.tl-time{font-size:10.5px;color:var(--text3);margin-top:2px;}
+
+/* INV WARNING */
+.inv-warn{display:flex;align-items:center;gap:9px;padding:9px 13px;background:var(--red-l);border:1px solid #fca5a5;border-radius:var(--r);margin-bottom:7px;font-size:12px;color:#7f1d1d;}
+
+/* SEC HEADER */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.sec-hd-title{font-size:14px;font-weight:700;color:var(--text);font-family:var(--display);}
+.sec-hd p{font-size:11.5px;color:var(--text3);margin-top:2px;}
+
+/* TAG */
+.tag{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:10.5px;font-weight:600;background:var(--surface3);color:var(--text2);}
+
+/* TOAST */
+.toast-wrap{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:7px;}
+
+/* SETTINGS TOGGLE */
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--border);}
+.setting-row:last-child{border-bottom:none;padding-bottom:0;}
+.setting-info h4{font-size:12.5px;font-weight:600;color:var(--text);}
+.setting-info p{font-size:11px;color:var(--text3);margin-top:1px;}
+.toggle{width:42px;height:23px;border-radius:20px;background:var(--surface3);border:1px solid var(--border2);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;}
+.toggle.on{background:var(--accent);border-color:var(--accent);}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:15px;height:15px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.toggle.on::after{transform:translateX(19px);}
+
+/* TICKET */
+.ticket-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:13px 14px;box-shadow:var(--sh);margin-bottom:7px;display:flex;align-items:center;gap:12px;transition:all .15s;cursor:pointer;}
+.ticket-card:hover{border-color:var(--border2);transform:translateX(2px);}
+.ticket-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.ticket-title{font-size:12.5px;font-weight:600;color:var(--text);margin-bottom:1px;}
+.ticket-sub{font-size:11px;color:var(--text3);}
+.ticket-id{font-size:10.5px;font-family:var(--mono);color:var(--text3);}
+.ticket-meta{margin-left:auto;text-align:right;flex-shrink:0;}
+.ticket-time{font-size:10.5px;color:var(--text3);}
+.ticket-pri{font-size:10px;font-weight:700;padding:2px 6px;border-radius:20px;margin-top:3px;display:inline-block;}
+.pri-high{background:var(--red-l);color:var(--red);}
+.pri-med{background:var(--yellow-l);color:var(--yellow);}
+.pri-low{background:var(--green-l);color:var(--green);}
+
+/* COUPON */
+.coupon-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px;box-shadow:var(--sh);margin-bottom:9px;display:flex;align-items:center;gap:12px;}
+.coup-code{font-family:var(--mono);font-size:14px;font-weight:700;padding:7px 12px;background:var(--accent-l);color:var(--accent);border-radius:var(--r);border:2px dashed #93c5fd;letter-spacing:1px;flex-shrink:0;}
+.coup-info{flex:1;}
+.coup-title{font-size:12.5px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.coup-meta{font-size:11px;color:var(--text3);}
+
+/* REVIEW */
+.review-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px;box-shadow:var(--sh);margin-bottom:9px;}
+.rev-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:7px;}
+.rev-user{display:flex;align-items:center;gap:8px;}
+.rev-name{font-size:12.5px;font-weight:600;color:var(--text);}
+.rev-prod{font-size:11px;color:var(--text3);}
+.rev-body{font-size:12px;color:var(--text2);line-height:1.55;}
+.rev-meta{display:flex;align-items:center;gap:9px;margin-top:8px;}
+
+/* EMPLOYEE */
+.emp-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px;box-shadow:var(--sh);transition:all .18s;}
+.emp-card:hover{border-color:var(--border2);box-shadow:var(--sh2);}
+
+/* AUDIT LOG */
+.audit-row{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);}
+.audit-row:last-child{border-bottom:none;}
+.audit-ic{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+.audit-action{font-size:12.5px;font-weight:600;color:var(--text);}
+.audit-detail{font-size:11.5px;color:var(--text3);}
+.audit-meta{margin-left:auto;text-align:right;flex-shrink:0;}
+.audit-time{font-size:10.5px;color:var(--text3);}
+.audit-user{font-size:11px;font-weight:600;color:var(--text2);margin-top:2px;}
+
+/* RBAC PERMISSION GRID */
+.rbac-table{width:100%;border-collapse:collapse;font-size:12px;}
+.rbac-table th{padding:10px 12px;background:var(--surface2);border:1px solid var(--border);font-size:10.5px;font-weight:700;color:var(--text3);text-align:center;}
+.rbac-table th:first-child{text-align:left;}
+.rbac-table td{padding:9px 12px;border:1px solid var(--border);text-align:center;vertical-align:middle;}
+.rbac-table td:first-child{text-align:left;font-weight:600;color:var(--text2);}
+.rbac-table tr:hover td{background:var(--surface2);}
+.perm-check{width:16px;height:16px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;}
+.perm-yes{background:var(--green-l);color:var(--green);}
+.perm-no{background:var(--red-l);color:var(--red);}
+.perm-partial{background:var(--yellow-l);color:var(--yellow);}
+
+/* QUICK ACTIONS */
+.qa-bar{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;}
+.qa-btn{display:flex;align-items:center;gap:6px;padding:7px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);color:var(--text2);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;box-shadow:var(--sh);}
+.qa-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-l);}
+.qa-btn i{font-size:12px;color:var(--accent);}
+
+/* CATEGORY CHIP */
+.cat-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:600;}
+
+.chart-canvas canvas{max-height:185px;width:100%!important;}
+
+/* RESPONSIVE */
+@media(max-width:1400px){.g6{grid-template-columns:repeat(3,1fr);}.g5{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:1200px){.g3{grid-template-columns:1fr 1fr;}.g4{grid-template-columns:repeat(2,1fr);}.g3-1,.g1-2{grid-template-columns:1fr;}}
+@media(max-width:900px){:root{--sidebar-w:52px;}.sb-logo-text,.sb-name,.sb-role,.sb-stats,.nav-label,.nav-link span,.nbadge,.chev,.sb-footer span{display:none!important;}.sb-logo{justify-content:center;padding:14px 0;}.sb-profile{padding:6px 4px;}.nav-link{justify-content:center;padding:10px 0;}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <!-- <div class="sb-logo-mark"></div> -->
+    <img class="sb-logo-mark" src="assets/images/company-logo.png">
+    <div class="sb-logo-text">BOS Center<small>D2C E-Commerce</small></div>
+  </div>
+  <div class="sb-profile">
+    <div class="sb-profile-row">
+      <div class="sb-av">BG</div>
+      <div><div class="sb-name">B.Gupta</div><div class="sb-role">ADMIN</div></div>
+      <div class="sb-pulse"></div>
+    </div>
+    <div class="sb-stats">
+      <div class="pstat"><div class="pstat-n">847</div><div class="pstat-l">Retailers</div></div>
+      <div class="pstat"><div class="pstat-n">3.4K</div><div class="pstat-l">Products</div></div>
+      <div class="pstat"><div class="pstat-n">₹24.8L</div><div class="pstat-l">Revenue</div></div>
+    </div>
+  </div>
+
+  <nav>
+    <div class="nav-group">
+      <div class="nav-label">Overview</div>
+      <a class="nav-link active" data-section="dashboard"><i class="fas fa-home"></i><span>Dashboard</span></a>
+      <a class="nav-link has-sub open" id="nl-analytics"><i class="fas fa-chart-line"></i><span>Analytics</span><i class="fas fa-chevron-down chev"></i></a>
+      <div class="nav-sub open" id="ns-analytics">
+        <a class="nav-sub-link" data-section="analytics">Sales Analytics</a>
+        <a class="nav-sub-link" data-section="traffic">Traffic & Conversion</a>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Catalogue</div>
+      <a class="nav-link" data-section="products"><i class="fas fa-box-open"></i><span>Products</span><span class="nbadge nb-blue">3.4K</span></a>
+      <a class="nav-link" data-section="categories"><i class="fas fa-tags"></i><span>Categories</span></a>
+      <a class="nav-link" data-section="inventory"><i class="fas fa-warehouse"></i><span>Inventory</span><span class="nbadge nb-red">7</span></a>
+      <a class="nav-link" data-section="media"><i class="fas fa-images"></i><span>Media Library</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Commerce</div>
+      <a class="nav-link" data-section="orders"><i class="fas fa-shopping-bag"></i><span>Orders</span><span class="nbadge nb-red">44</span></a>
+      <a class="nav-link" data-section="returns"><i class="fas fa-undo"></i><span>Returns & Refunds</span><span class="nbadge nb-yellow">8</span></a>
+      <a class="nav-link" data-section="shipping"><i class="fas fa-truck"></i><span>Shipping</span></a>
+      <a class="nav-link" data-section="payments"><i class="fas fa-credit-card"></i><span>Payments</span></a>
+      <a class="nav-link" data-section="coupons"><i class="fas fa-ticket-alt"></i><span>Coupons & Offers</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Customers</div>
+      <a class="nav-link" data-section="customers"><i class="fas fa-users"></i><span>Customers</span><span class="nbadge nb-blue">2,847</span></a>
+      <a class="nav-link" data-section="reviews"><i class="fas fa-star"></i><span>Reviews</span><span class="nbadge nb-yellow">12</span></a>
+      <a class="nav-link" data-section="support"><i class="fas fa-headset"></i><span>Support</span><span class="nbadge nb-red">7</span></a>
+      <a class="nav-link" data-section="kyc"><i class="fas fa-id-card"></i><span>KYC</span><span class="nbadge nb-red">18</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">HR & Access</div>
+      <a class="nav-link" data-section="employees"><i class="fas fa-user-tie"></i><span>Employees</span><span class="nbadge nb-blue">38</span></a>
+      <a class="nav-link" data-section="rbac"><i class="fas fa-shield-alt"></i><span>Roles & Permissions</span></a>
+      <a class="nav-link" data-section="audit"><i class="fas fa-clipboard-list"></i><span>Audit Logs</span><span class="nbadge nb-purple">NEW</span></a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Platform</div>
+      <a class="nav-link" data-section="settings"><i class="fas fa-cog"></i><span>Settings</span></a>
+    </div>
+  </nav>
+
+  <div class="sb-footer">
+    <span class="online-pill"><span>All Systems OK</span></span>
+    <span style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.3);">v4.1.0</span>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <header class="topbar">
+    <div class="tb-left">
+      <div class="pg-title">
+        <h2 id="pg-h">E-commerce Dashboard</h2>
+        <p id="pg-p">Overview · Sales · Orders · Analytics</p>
+      </div>
+    </div>
+    <div class="tb-right">
+      <div class="tb-search"><i class="fas fa-search"></i><input type="text" placeholder="Search orders, products, customers…"></div>
+      <div class="tabs-row">
+        <div class="trtab active" onclick="setRange(this)">Today</div>
+        <div class="trtab" onclick="setRange(this)">Week</div>
+        <div class="trtab" onclick="setRange(this)">Month</div>
+        <div class="trtab" onclick="setRange(this)">Year</div>
+      </div>
+      <div class="icon-btn" id="notifBtn"><i class="fas fa-bell"></i><span class="notif-dot" id="notifCount">9</span></div>
+      <div class="icon-btn" title="Refresh" id="refreshBtn"><i class="fas fa-sync-alt" id="ri"></i></div>
+      <div class="tb-user">
+        <div class="tb-uav">BC</div>
+        <div><div class="tb-uname">B.Gupta</div><div class="tb-urole">Admin</div></div>
+        <i class="fas fa-chevron-down" style="font-size:8px;color:var(--text3);margin-left:2px;"></i>
+      </div>
+    </div>
+  </header>
+
+  <!-- SECTION NAV -->
+  <div class="section-nav" id="sectionNav">
+    <div class="snav-item active" data-section="dashboard"><i class="fas fa-home"></i>Dashboard</div>
+    <div class="snav-item" data-section="orders"><i class="fas fa-shopping-bag"></i>Orders <span class="cnt-red">44</span></div>
+    <div class="snav-item" data-section="products"><i class="fas fa-box-open"></i>Products</div>
+    <div class="snav-item" data-section="inventory"><i class="fas fa-warehouse"></i>Inventory</div>
+    <div class="snav-item" data-section="customers"><i class="fas fa-users"></i>Customers</div>
+    <div class="snav-item" data-section="analytics"><i class="fas fa-chart-bar"></i>Analytics</div>
+    <div class="snav-item" data-section="payments"><i class="fas fa-credit-card"></i>Payments</div>
+    <div class="snav-item" data-section="shipping"><i class="fas fa-truck"></i>Shipping</div>
+    <div class="snav-item" data-section="returns"><i class="fas fa-undo"></i>Returns</div>
+    <div class="snav-item" data-section="coupons"><i class="fas fa-ticket-alt"></i>Coupons</div>
+    <div class="snav-item" data-section="reviews"><i class="fas fa-star"></i>Reviews</div>
+    <div class="snav-item" data-section="support"><i class="fas fa-headset"></i>Support</div>
+    <div class="snav-item" data-section="employees"><i class="fas fa-user-tie"></i>Employees</div>
+    <div class="snav-item" data-section="rbac"><i class="fas fa-shield-alt"></i>RBAC</div>
+    <div class="snav-item" data-section="audit"><i class="fas fa-clipboard-list"></i>Audit Logs</div>
+    <div class="snav-item" data-section="settings"><i class="fas fa-cog"></i>Settings</div>
+  </div>
+
+  <div class="content">
+
+    <!-- ═══ DASHBOARD ═══ -->
+    <div class="page-section active" id="sec-dashboard">
+      <div class="qa-bar">
+        <a class="qa-btn" onclick="navigate('products')"><i class="fas fa-plus"></i>Add Product</a>
+        <a class="qa-btn" onclick="navigate('orders')"><i class="fas fa-shopping-bag"></i>View Orders</a>
+        <a class="qa-btn" onclick="navigate('coupons')"><i class="fas fa-ticket-alt"></i>Create Coupon</a>
+        <a class="qa-btn" onclick="navigate('employees')"><i class="fas fa-user-plus"></i>Add Employee</a>
+        <a class="qa-btn"><i class="fas fa-chart-line"></i>Generate Report</a>
+        <a class="qa-btn"><i class="fas fa-download"></i>Export Data</a>
+        <a class="qa-btn" onclick="navigate('audit')"><i class="fas fa-clipboard-list"></i>Audit Logs</a>
+      </div>
+
+      <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span><strong>7 products</strong> critically low on stock. <a class="al-link" onclick="navigate('inventory')">Restock →</a> &nbsp;·&nbsp; Order <strong>#ORD-2104</strong> awaiting approval. &nbsp;·&nbsp; <strong>8 return requests</strong> pending. &nbsp;·&nbsp; <strong>3 employee KYC</strong> pending verification.</span>
+      </div>
+
+      <div class="kpi-grid g6 mb14" id="kpi-dash"></div>
+
+      <div class="g3-1">
+        <div class="card mb14">
+          <div class="card-hd">
+            <div class="card-title"><i class="fas fa-chart-bar"></i>Revenue & Orders (12 months)</div>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <span class="live-pill"><span class="live-pulse"></span>Live</span>
+              <div class="tabs-row">
+                <div class="trtab active" onclick="switchChart('bar',this)">Bar</div>
+                <div class="trtab" onclick="switchChart('line',this)">Line</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body chart-canvas"><canvas id="mainChart"></canvas></div>
+        </div>
+        <div class="card mb14">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-clock"></i>Recent Orders</div><a onclick="navigate('orders')" style="font-size:11px;color:var(--accent);cursor:pointer;font-weight:600;">See all →</a></div>
+          <div class="card-body" id="recent-orders-list" style="padding-top:4px;"></div>
+        </div>
+      </div>
+
+      <div class="g3">
+        <div class="card mb14">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-chart-pie"></i>Sales by Category</div></div>
+          <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center;">
+            <div style="max-height:155px;"><canvas id="catDonut"></canvas></div>
+            <div class="dl" id="cat-legend"></div>
+          </div>
+        </div>
+        <div class="card mb14">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-trophy"></i>Top Selling Products</div></div>
+          <div class="card-body" id="top-products-body"></div>
+        </div>
+        <div class="card mb14">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-map-marker-alt"></i>Top Locations</div></div>
+          <div class="card-body" id="top-locations-body"></div>
+        </div>
+      </div>
+
+      <div class="g2">
+        <div class="card mb14">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-users"></i>Customer Overview</div></div>
+          <div class="card-body">
+            <div class="info-grid" style="margin-bottom:12px;">
+              <div class="info-item"><div class="info-item-lbl">Total Customers</div><div class="info-item-val" style="color:var(--accent);">2,847</div><div class="info-item-sub" style="color:var(--green);">↑ +94 this week</div></div>
+              <div class="info-item"><div class="info-item-lbl">Repeat Buyers</div><div class="info-item-val" style="color:var(--purple);">892</div><div class="info-item-sub" style="color:var(--text3);">31.3% of total</div></div>
+              <div class="info-item"><div class="info-item-lbl">Avg Order Value</div><div class="info-item-val" style="color:var(--green);">₹22,840</div><div class="info-item-sub" style="color:var(--green);">↑ +₹2,100 MoM</div></div>
+              <div class="info-item"><div class="info-item-lbl">Retention Rate</div><div class="info-item-val" style="color:var(--yellow);">74.8%</div><div class="info-item-sub" style="color:var(--text3);">Industry: 68%</div></div>
+            </div>
+            <div id="cust-stat-rows"></div>
+          </div>
+        </div>
+        <div class="card mb14">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-wallet"></i>Revenue & Finance</div></div>
+          <div class="card-body">
+            <div class="info-grid" style="margin-bottom:12px;">
+              <div class="info-item"><div class="info-item-lbl">Total Revenue</div><div class="info-item-val" style="color:var(--green);">₹24.8L</div><div class="info-item-sub" style="color:var(--green);">↑ +22.4% MoM</div></div>
+              <div class="info-item"><div class="info-item-lbl">Today's Revenue</div><div class="info-item-val" style="color:var(--accent);">₹84,200</div><div class="info-item-sub" style="color:var(--text3);">₹67K yesterday</div></div>
+              <div class="info-item"><div class="info-item-lbl">Platform Fees</div><div class="info-item-val" style="color:var(--accent);">₹3.84L</div><div class="info-item-sub" style="color:var(--green);">↑ +6.1% MoM</div></div>
+              <div class="info-item"><div class="info-item-lbl">Refunds</div><div class="info-item-val" style="color:var(--red);">₹28,400</div><div class="info-item-sub" style="color:var(--text3);">11 orders</div></div>
+            </div>
+            <div id="finance-retailer-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ORDERS ═══ -->
+    <div class="page-section" id="sec-orders">
+      <div class="sec-hd">
+        <div><div class="sec-hd-title">Order Management</div><p>Track, process and manage all customer orders across all categories</p></div>
+        <div style="display:flex;gap:7px;flex-wrap:wrap;">
+          <input class="mini-select" type="text" placeholder="Search orders…" style="width:170px;padding:6px 10px;font-size:12px;">
+          <select class="mini-select"><option>All Categories</option><option>Clothing</option><option>Electronics</option><option>Footwear</option><option>Home & Living</option><option>Beauty</option><option>Sports</option><option>Others</option></select>
+          <select class="mini-select"><option>All Statuses</option><option>Pending</option><option>Processing</option><option>Shipped</option><option>Delivered</option><option>Cancelled</option></select>
+          <select class="mini-select"><option>All Payment</option><option>UPI</option><option>Credit Card</option><option>COD</option><option>EMI</option><option>Net Banking</option></select>
+          <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i>Export</button>
+          <button class="btn btn-primary btn-sm"><i class="fas fa-plus"></i>Manual Order</button>
+        </div>
+      </div>
+      <div class="kpi-grid g5 mb14" id="order-kpis"></div>
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title"><i class="fas fa-list"></i>All Orders <span style="font-size:10.5px;font-weight:400;color:var(--text3);margin-left:5px;">Showing 15 of 2,104</span></div>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-ghost btn-sm"><i class="fas fa-filter"></i>Filter</button>
+            <button class="btn btn-ghost btn-sm"><i class="fas fa-sort"></i>Sort</button>
+          </div>
+        </div>
+        <div class="tbl-wrap"><table><thead><tr><th>Order ID</th><th>Customer</th><th>Product(s)</th><th>Category</th><th>Date</th><th>Amount</th><th>Payment</th><th>Delivery</th><th>Status</th><th>Actions</th></tr></thead><tbody id="orders-tbody"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ═══ PRODUCTS ═══ -->
+    <div class="page-section" id="sec-products">
+      <div class="sec-hd">
+        <div><div class="sec-hd-title">Product Management</div><p>Manage your entire product catalogue — Clothing, Electronics, Footwear, Home, Beauty & more</p></div>
+        <div style="display:flex;gap:7px;flex-wrap:wrap;">
+          <input class="mini-select" type="text" placeholder="Search products…" style="width:160px;padding:6px 10px;font-size:12px;">
+          <select class="mini-select" id="prod-cat-filter"><option>All Categories</option><option>Clothing</option><option>Electronics</option><option>Footwear</option><option>Home & Living</option><option>Beauty & Grooming</option><option>Sports & Fitness</option><option>Books & Stationery</option><option>Watches & Jewellery</option><option>Toys & Kids</option><option>Others</option></select>
+          <select class="mini-select"><option>All Status</option><option>Active</option><option>Inactive</option><option>Draft</option></select>
+          <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i>Export</button>
+          <button class="btn btn-primary btn-sm" onclick="openModal('addProductModal')"><i class="fas fa-plus"></i>Add Product</button>
+        </div>
+      </div>
+      <div class="kpi-grid g4 mb14" id="prod-kpis"></div>
+      <!-- Category filter chips -->
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px;" id="cat-chips"></div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title"><i class="fas fa-box-open"></i>All Products</div><span style="font-size:11px;color:var(--text3);">3,418 total · 7 low stock · 2 out of stock</span></div>
+        <div class="tbl-wrap"><table><thead><tr><th>Product</th><th>Category</th><th>Sub-Category</th><th>SKU</th><th>Stock</th><th>Price</th><th>MRP</th><th>Sales</th><th>Rating</th><th>Status</th><th>Actions</th></tr></thead><tbody id="products-tbody"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ═══ CATEGORIES ═══ -->
+    <div class="page-section" id="sec-categories">
+      <div class="sec-hd">
+        <div><div class="sec-hd-title">Category Management</div><p>Manage all product categories and sub-categories</p></div>
+        <button class="btn btn-primary btn-sm" onclick="openModal('addCatModal')"><i class="fas fa-plus"></i>Add Category</button>
+      </div>
+      <div class="kpi-grid g4 mb14" id="cat-kpis"></div>
+      <div class="g2 mb0">
+        <div class="card">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-tags"></i>All Categories</div></div>
+          <div class="tbl-wrap"><table><thead><tr><th>Category</th><th>Sub-categories</th><th>Products</th><th>Revenue (MTD)</th><th>Status</th><th>Actions</th></tr></thead><tbody id="cat-tbody"></tbody></table></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-chart-pie"></i>Category Revenue Share</div></div>
+          <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center;">
+            <div style="max-height:155px;"><canvas id="catRevDonut"></canvas></div>
+            <div class="dl" id="cat-rev-legend"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ INVENTORY ═══ -->
+    <div class="page-section" id="sec-inventory">
+      <div class="sec-hd">
+        <div><div class="sec-hd-title">Inventory Management</div><p>Monitor stock levels across all categories and warehouse operations</p></div>
+        <div style="display:flex;gap:7px;">
+          <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i>Export</button>
+          <button class="btn btn-warning btn-sm"><i class="fas fa-exclamation-triangle"></i>Reorder All Low Stock</button>
+          <button class="btn btn-primary btn-sm"><i class="fas fa-plus"></i>Add Stock</button>
+        </div>
+      </div>
+      <div class="kpi-grid g4 mb14" id="inv-kpis"></div>
+      <div id="inv-warnings"></div>
+      <div class="g3-1 mb0">
+        <div class="card">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-boxes"></i>Stock Levels</div>
+            <div style="display:flex;gap:6px;">
+              <select class="mini-select"><option>All Categories</option><option>Clothing</option><option>Electronics</option><option>Footwear</option><option>Home & Living</option><option>Beauty</option></select>
+              <button class="btn btn-ghost btn-sm"><i class="fas fa-sync-alt"></i>Sync</button>
+            </div>
+          </div>
+          <div class="tbl-wrap"><table><thead><tr><th>Product</th><th>Category</th><th>SKU</th><th>In Stock</th><th>Reserved</th><th>Reorder Pt.</th><th>Supplier</th><th>Last Restocked</th><th>Status</th></tr></thead><tbody id="inv-tbody"></tbody></table></div>
+        </div>
+        <div>
+          <div class="card mb14">
+            <div class="card-hd"><div class="card-title"><i class="fas fa-chart-bar"></i>Stock by Category</div></div>
+            <div class="card-body chart-canvas"><canvas id="stockChart"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><div class="card-title"><i class="fas fa-history"></i>Recent Stock Activity</div></div>
+            <div class="card-body"><div class="timeline" id="inv-timeline"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ CUSTOMERS ═══ -->
+    <div class="page-section" id="sec-customers">
+      <div class="sec-hd">
+        <div><div class="sec-hd-title">Customer Management</div><p>Customers self-onboard via the D2C portal — view profiles, segments and behaviour</p></div>
+        <div style="display:flex;gap:7px;">
+          <input class="mini-select" type="text" placeholder="Search customers…" style="width:180px;padding:6px 10px;font-size:12px;">
+          <select class="mini-select"><option>All Segments</option><option>VIP / Platinum</option><option>Gold</option><option>Regular</option><option>New</option><option>At Risk</option><option>Churned</option></select>
+          <select class="mini-select"><option>All Status</option><option>Active</option><option>Inactive</option><option>Suspended</option></select>
+          <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i>Export</button>
+        </div>
+      </div>
+      <div class="alert alert-info" style="margin-bottom:12px;">
+        <i class="fas fa-info-circle"></i>
+        <span>Customers self-register through the D2C storefront. This panel is for viewing, segmenting and managing existing customer accounts only.</span>
+      </div>
+      <div class="kpi-grid g4 mb14" id="cust-kpis"></div>
+      <div class="g3-1 mb0">
+        <div class="card">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-users"></i>Customer Directory</div></div>
+          <div class="tbl-wrap"><table><thead><tr><th>Customer</th><th>Email</th><th>Phone</th><th>Location</th><th>Orders</th><th>Lifetime Spent</th><th>Segment</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead><tbody id="cust-tbody"></tbody></table></div>
+        </div>
+        <div>
+          <div class="card mb14">
+            <div class="card-hd"><div class="card-title"><i class="fas fa-chart-pie"></i>Customer Segments</div></div>
+            <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center;">
+              <div style="max-height:145px;"><canvas id="custDonut"></canvas></div>
+              <div class="dl" id="cust-legend"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><div class="card-title"><i class="fas fa-chart-line"></i>Customer Growth (6 months)</div></div>
+            <div class="card-body chart-canvas"><canvas id="custGrowth"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ANALYTICS ═══ -->
+    <div class="page-section" id="sec-analytics">
+      <div class="sec-hd">
+        <div><div class="sec-hd-title">Sales Analytics</div><p>Deep-dive into revenue, conversion and performance metrics</p></div>
+        <div style="display:flex;gap:7px;">
+          <select class="mini-select"><option>Last 12 months</option><option>Last 6 months</option><option>Last 30 days</option><option>Custom range</option></select>
+          <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i>Export Report</button>
+        </div>
+      </div>
+      <div class="kpi-grid g4 mb14" id="analytics-kpis"></div>
+      <div class="g2">
+        <div class="card mb14">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-chart-area"></i>Revenue Trend (12M)</div></div>
+          <div class="card-body chart-canvas"><canvas id="revTrend"></canvas></div>
+        </div>
+        <div class="card mb14">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-chart-bar"></i>Orders by Channel</div></div>
+          <div class="card-body chart-canvas"><canvas id="channelChart"></canvas></div>
+        </div>
+      </div>
+      <div class="g3">
+        <div class="card mb0">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-filter"></i>Conversion Funnel</div></div>
+          <div class="card-body" id="funnel-body"></div>
+        </div>
+        <div class="card mb0">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-globe"></i>Revenue by Region</div></div>
+          <div class="card-body" id="region-body"></div>
+        </div>
+        <div class="card mb0">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-clock"></i>Peak Order Hours</div></div>
+          <div class="card-body chart-canvas"><canvas id="peakChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PAYMENTS ═══ -->
+    <div class="page-section" id="sec-payments">
+      <div class="sec-hd"><div><div class="sec-hd-title">Payment Management</div><p>Transactions, settlements and gateway performance</p></div></div>
+      <div class="kpi-grid g4 mb14" id="pay-kpis"></div>
+      <div class="g2">
+        <div class="card">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-exchange-alt"></i>Recent Transactions</div><button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i>Export</button></div>
+          <div class="tbl-wrap"><table><thead><tr><th>Txn ID</th><th>Order</th><th>Customer</th><th>Amount</th><th>Method</th><th>Gateway</th><th>Status</th><th>Date</th></tr></thead><tbody id="pay-tbody"></tbody></table></div>
+        </div>
+        <div>
+          <div class="card mb14">
+            <div class="card-hd"><div class="card-title"><i class="fas fa-chart-pie"></i>Payment Methods Split</div></div>
+            <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center;">
+              <div style="max-height:145px;"><canvas id="payDonut"></canvas></div>
+              <div class="dl" id="pay-legend"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><div class="card-title"><i class="fas fa-university"></i>Settlement Summary</div></div>
+            <div class="card-body" id="settlement-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SHIPPING ═══ -->
+    <div class="page-section" id="sec-shipping">
+      <div class="sec-hd"><div><div class="sec-hd-title">Shipping & Logistics</div><p>Manage deliveries, couriers and live tracking</p></div><button class="btn btn-primary btn-sm"><i class="fas fa-plus"></i>Create Shipment</button></div>
+      <div class="kpi-grid g4 mb14" id="ship-kpis"></div>
+      <div class="g3-1 mb0">
+        <div class="card">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-truck"></i>Active Shipments</div>
+            <select class="mini-select"><option>All Couriers</option><option>Delhivery</option><option>Blue Dart</option><option>Ekart</option><option>Xpressbees</option><option>DTDC</option></select>
+          </div>
+          <div class="tbl-wrap"><table><thead><tr><th>Tracking #</th><th>Order</th><th>Customer</th><th>Category</th><th>Courier</th><th>Origin</th><th>Destination</th><th>ETA</th><th>Status</th></tr></thead><tbody id="ship-tbody"></tbody></table></div>
+        </div>
+        <div>
+          <div class="card mb14">
+            <div class="card-hd"><div class="card-title"><i class="fas fa-chart-bar"></i>Courier Performance</div></div>
+            <div class="card-body" id="courier-perf-body"></div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><div class="card-title"><i class="fas fa-map-marker-alt"></i>Zone-wise Volume</div></div>
+            <div class="card-body" id="zone-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ RETURNS ═══ -->
+    <div class="page-section" id="sec-returns">
+      <div class="sec-hd">
+        <div><div class="sec-hd-title">Returns & Refunds</div><p>Process return requests, exchanges and refunds</p></div>
+        <div style="display:flex;gap:7px;">
+          <select class="mini-select"><option>All Categories</option><option>Clothing</option><option>Electronics</option><option>Footwear</option></select>
+          <select class="mini-select"><option>All Reasons</option><option>Defective</option><option>Wrong Item</option><option>Size Issue</option><option>Changed Mind</option><option>Not as Described</option></select>
+          <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i>Export</button>
+        </div>
+      </div>
+      <div class="kpi-grid g4 mb14" id="ret-kpis"></div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title"><i class="fas fa-undo"></i>Return Requests</div></div>
+        <div class="tbl-wrap"><table><thead><tr><th>Return ID</th><th>Order ID</th><th>Customer</th><th>Product</th><th>Category</th><th>Reason</th><th>Requested</th><th>Refund Amt</th><th>Status</th><th>Actions</th></tr></thead><tbody id="ret-tbody"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ═══ COUPONS ═══ -->
+    <div class="page-section" id="sec-coupons">
+      <div class="sec-hd"><div><div class="sec-hd-title">Coupons & Promotions</div><p>Create and manage discount codes, flash sales and offers</p></div><button class="btn btn-primary btn-sm" onclick="openModal('couponModal')"><i class="fas fa-plus"></i>Create Coupon</button></div>
+      <div class="kpi-grid g4 mb14" id="coup-kpis"></div>
+      <div id="coupon-list"></div>
+    </div>
+
+    <!-- ═══ REVIEWS ═══ -->
+    <div class="page-section" id="sec-reviews">
+      <div class="sec-hd">
+        <div><div class="sec-hd-title">Reviews & Ratings</div><p>Moderate and manage customer product reviews</p></div>
+        <div style="display:flex;gap:7px;">
+          <select class="mini-select"><option>All Categories</option><option>Clothing</option><option>Electronics</option><option>Footwear</option><option>Beauty</option></select>
+          <select class="mini-select"><option>All Ratings</option><option>5 Star</option><option>4 Star</option><option>3 Star & below</option></select>
+          <select class="mini-select"><option>All Status</option><option>Pending</option><option>Approved</option><option>Rejected</option></select>
+        </div>
+      </div>
+      <div class="kpi-grid g4 mb14" id="rev-kpis"></div>
+      <div id="review-list"></div>
+    </div>
+
+    <!-- ═══ SUPPORT ═══ -->
+    <div class="page-section" id="sec-support">
+      <div class="sec-hd">
+        <div><div class="sec-hd-title">Customer Support</div><p>Manage tickets, live chat and customer queries</p></div>
+        <div style="display:flex;gap:7px;">
+          <select class="mini-select"><option>All Priority</option><option>High</option><option>Medium</option><option>Low</option></select>
+          <select class="mini-select"><option>All Status</option><option>Open</option><option>In Progress</option><option>Resolved</option><option>Closed</option></select>
+          <button class="btn btn-primary btn-sm"><i class="fas fa-plus"></i>New Ticket</button>
+        </div>
+      </div>
+      <div class="kpi-grid g4 mb14" id="sup-kpis"></div>
+      <div class="g3-1 mb0">
+        <div id="ticket-list"></div>
+        <div class="card">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-chart-bar"></i>Ticket Analytics</div></div>
+          <div class="card-body chart-canvas"><canvas id="ticketChart"></canvas></div>
+          <div class="card-body" style="padding-top:0;" id="sup-stats"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ EMPLOYEES ═══ -->
+    <div class="page-section" id="sec-employees">
+      <div class="sec-hd">
+        <div><div class="sec-hd-title">Employee Management</div><p>Manage all staff, roles, departments and access</p></div>
+        <div style="display:flex;gap:7px;">
+          <input class="mini-select" type="text" placeholder="Search employees…" style="width:180px;padding:6px 10px;font-size:12px;">
+          <select class="mini-select"><option>All Departments</option><option>Technology</option><option>Operations</option><option>Sales</option><option>Customer Support</option><option>Warehouse</option><option>Finance</option><option>HR</option><option>Marketing</option></select>
+          <select class="mini-select"><option>All Status</option><option>Active</option><option>On Leave</option><option>Suspended</option><option>Terminated</option></select>
+          <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i>Export</button>
+          <button class="btn btn-primary btn-sm" onclick="openModal('addEmpModal')"><i class="fas fa-user-plus"></i>Add Employee</button>
+        </div>
+      </div>
+      <div class="kpi-grid g4 mb14" id="emp-kpis"></div>
+      <div class="card mb14">
+        <div class="card-hd">
+          <div class="card-title"><i class="fas fa-users"></i>All Employees</div>
+          <span style="font-size:11px;color:var(--text3);">38 total · 34 active · 2 on leave · 1 suspended · 1 terminated</span>
+        </div>
+        <div class="tbl-wrap"><table><thead><tr><th>Employee</th><th>EMP ID</th><th>Department</th><th>Role</th><th>Email</th><th>Phone</th><th>Join Date</th><th>Last Login</th><th>Status</th><th>Actions</th></tr></thead><tbody id="emp-tbody"></tbody></table></div>
+      </div>
+      <div class="g2 mb0">
+        <div class="card">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-chart-pie"></i>Dept Distribution</div></div>
+          <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center;">
+            <div style="max-height:150px;"><canvas id="empDeptDonut"></canvas></div>
+            <div class="dl" id="emp-dept-legend"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><div class="card-title"><i class="fas fa-history"></i>Recent HR Activity</div></div>
+          <div class="card-body"><div class="timeline" id="emp-timeline"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ RBAC ═══ -->
+    <div class="page-section" id="sec-rbac">
+      <div class="sec-hd">
+        <div><div class="sec-hd-title">Roles & Permissions (RBAC)</div><p>Define and manage role-based access control for all employee roles</p></div>
+        <div style="display:flex;gap:7px;">
+          <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i>Export Policy</button>
+          <button class="btn btn-primary btn-sm" onclick="openModal('addRoleModal')"><i class="fas fa-plus"></i>Create Role</button>
+        </div>
+      </div>
+      <div class="kpi-grid g4 mb14" id="rbac-kpis"></div>
+      <div class="alert alert-warning">
+        <i class="fas fa-shield-alt"></i>
+        <span>Changes to role permissions take effect immediately for all assigned employees. <strong>Super Admin</strong> role cannot be modified. Always review before saving.</span>
+      </div>
+      <div class="card mb14">
+        <div class="card-hd"><div class="card-title"><i class="fas fa-users-cog"></i>Role Overview</div></div>
+        <div class="tbl-wrap"><table><thead><tr><th>Role Name</th><th>Assigned Employees</th><th>Permissions Count</th><th>Created By</th><th>Created On</th><th>Last Modified</th><th>Status</th><th>Actions</th></tr></thead><tbody id="role-tbody"></tbody></table></div>
+      </div>
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title"><i class="fas fa-table"></i>Permission Matrix</div>
+          <div style="display:flex;gap:6px;">
+            <select class="mini-select" id="rbac-role-select"><option>Super Admin</option><option>Operations Manager</option><option>Sales Manager</option><option>Support Agent</option><option>Warehouse Staff</option><option>Finance Analyst</option><option>Marketing Manager</option></select>
+            <button class="btn btn-primary btn-sm"><i class="fas fa-save"></i>Save Permissions</button>
+          </div>
+        </div>
+        <div class="card-body" style="overflow-x:auto;">
+          <div id="rbac-matrix"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ AUDIT LOGS ═══ -->
+    <div class="page-section" id="sec-audit">
+      <div class="sec-hd">
+        <div><div class="sec-hd-title">Audit Logs</div><p>Complete activity trail of all admin and employee actions on the platform</p></div>
+        <div style="display:flex;gap:7px;">
+          <input class="mini-select" type="text" placeholder="Search logs…" style="width:180px;padding:6px 10px;font-size:12px;">
+          <select class="mini-select"><option>All Actors</option><option>BOS Admin</option><option>Priya Mehta</option><option>Rahul Singh</option><option>Anjali Verma</option><option>System</option></select>
+          <select class="mini-select"><option>All Modules</option><option>Orders</option><option>Products</option><option>Customers</option><option>Employees</option><option>RBAC</option><option>Payments</option><option>Settings</option></select>
+          <select class="mini-select"><option>All Actions</option><option>CREATE</option><option>UPDATE</option><option>DELETE</option><option>LOGIN</option><option>EXPORT</option><option>APPROVE</option></select>
+          <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i>Export Logs</button>
+        </div>
+      </div>
+      <div class="kpi-grid g4 mb14" id="audit-kpis"></div>
+      <div class="g3-1 mb0">
+        <div class="card">
+          <div class="card-hd">
+            <div class="card-title"><i class="fas fa-clipboard-list"></i>Activity Log <span style="font-size:10.5px;font-weight:400;color:var(--text3);margin-left:5px;">Showing 20 of 14,280 entries</span></div>
+            <span class="live-pill"><span class="live-pulse"></span>Real-time</span>
+          </div>
+          <div class="tbl-wrap"><table><thead><tr><th>Timestamp</th><th>Actor</th><th>Role</th><th>Module</th><th>Action</th><th>Target / Resource</th><th>IP Address</th><th>Severity</th></tr></thead><tbody id="audit-tbody"></tbody></table></div>
+        </div>
+        <div>
+          <div class="card mb14">
+            <div class="card-hd"><div class="card-title"><i class="fas fa-chart-bar"></i>Actions by Module</div></div>
+            <div class="card-body chart-canvas"><canvas id="auditModuleChart"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><div class="card-title"><i class="fas fa-user-clock"></i>Top Actors Today</div></div>
+            <div class="card-body" id="audit-actors"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SETTINGS ═══ -->
+    <div class="page-section" id="sec-settings">
+      <div class="sec-hd"><div><div class="sec-hd-title">Platform Settings</div><p>Configure your D2C store preferences and integrations</p></div><button class="btn btn-primary btn-sm"><i class="fas fa-save"></i>Save All Changes</button></div>
+      <div class="g2">
+        <div>
+          <div class="card mb14">
+            <div class="card-hd"><div class="card-title"><i class="fas fa-store"></i>Store Configuration</div></div>
+            <div class="card-body">
+              <div class="fg"><label>Store Name</label><input type="text" value="BOS Center D2C Store"></div>
+              <div class="fg"><label>Store URL</label><input type="text" value="https://boscenter.in/store"></div>
+              <div class="fg-row"><div class="fg"><label>Currency</label><select><option>INR (₹)</option><option>USD ($)</option></select></div><div class="fg"><label>Timezone</label><select><option>IST (Asia/Kolkata)</option><option>UTC</option></select></div></div>
+              <div class="fg"><label>Store Email</label><input type="email" value="admin@boscenter.in"></div>
+              <div class="fg"><label>Support Phone</label><input type="text" value="+91 98765 43210"></div>
+              <div class="fg"><label>GST Number</label><input type="text" value="27AABCU9603R1ZV"></div>
+              <div class="fg-row"><div class="fg"><label>Default GST Rate</label><select><option>18%</option><option>12%</option><option>5%</option></select></div><div class="fg"><label>TCS Rate</label><input type="text" value="1%"></div></div>
+            </div>
+          </div>
+          <div class="card mb14">
+            <div class="card-hd"><div class="card-title"><i class="fas fa-credit-card"></i>Payment Gateways</div></div>
+            <div class="card-body">
+              <div class="setting-row"><div class="setting-info"><h4>Razorpay</h4><p>Primary gateway · 2% + ₹3/txn</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>PayU</h4><p>Backup gateway · 1.8% + ₹2/txn</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>Cash on Delivery</h4><p>COD enabled below ₹50,000</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>No-Cost EMI</h4><p>Via partner banks</p></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>Buy Now Pay Later (BNPL)</h4><p>Simpl, LazyPay integration</p></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><div class="card-title"><i class="fas fa-truck"></i>Shipping</div></div>
+            <div class="card-body">
+              <div class="setting-row"><div class="setting-info"><h4>Free Shipping Threshold</h4><p>Free on orders ≥ ₹999</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>Express Delivery</h4><p>Same-day / next-day option</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>International Shipping</h4><p>Cross-border delivery</p></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+              <div class="fg" style="margin-top:14px;margin-bottom:0;"><label>Default Courier</label><select><option>Delhivery</option><option>Blue Dart</option><option>Ekart</option></select></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card mb14">
+            <div class="card-hd"><div class="card-title"><i class="fas fa-bell"></i>Notifications</div></div>
+            <div class="card-body">
+              <div class="setting-row"><div class="setting-info"><h4>New Order Alerts</h4><p>Notify on every new order</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>Low Stock Alerts</h4><p>Alert below reorder point</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>Return Requests</h4><p>Notify on new return/refund</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>Support Escalations</h4><p>High priority ticket alerts</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>Employee Login Alerts</h4><p>Notify on new/unusual logins</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>Weekly Reports</h4><p>Auto-send every Monday 9AM</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            </div>
+          </div>
+          <div class="card mb14">
+            <div class="card-hd"><div class="card-title"><i class="fas fa-shield-alt"></i>Security & Access</div></div>
+            <div class="card-body">
+              <div class="setting-row"><div class="setting-info"><h4>Two-Factor Authentication</h4><p>Require 2FA for admin logins</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>IP Whitelist</h4><p>Restrict to whitelisted IPs</p></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>Session Timeout</h4><p>Auto-logout after 30 min</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>Detailed Audit Logs</h4><p>Log all admin activity</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>RBAC Enforcement</h4><p>Strict role-based access</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><div class="card-title"><i class="fas fa-plug"></i>Integrations</div></div>
+            <div class="card-body">
+              <div class="setting-row"><div class="setting-info"><h4>Google Analytics 4</h4><p>Track store traffic & events</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>Meta Pixel</h4><p>Facebook/Instagram ad tracking</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>WhatsApp Business API</h4><p>Order updates via WhatsApp</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="setting-row"><div class="setting-info"><h4>Shiprocket API</h4><p>Multi-courier aggregator</p></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- NOTIFICATION PANEL -->
+<div class="notif-panel" id="notifPanel">
+  <div class="notif-hd"><h3>Notifications <span style="background:var(--red-l);color:var(--red);font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:20px;margin-left:6px;font-family:var(--mono);">9 new</span></h3><a href="#" style="font-size:11px;color:var(--accent);">Mark all read</a></div>
+  <div id="notifList"></div>
+</div>
+
+<!-- MODALS -->
+<!-- Add Product -->
+<div class="modal-overlay" id="addProductModal">
+  <div class="modal modal-lg">
+    <div class="modal-hd"><h3><i class="fas fa-plus" style="color:var(--accent);margin-right:8px;"></i>Add New Product</h3><button class="modal-x" onclick="closeModal('addProductModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="fg-row">
+        <div class="fg"><label>Product Name</label><input type="text" placeholder="e.g. Men's Slim Fit Chinos"></div>
+        <div class="fg"><label>Category</label><select><option>Clothing</option><option>Electronics</option><option>Footwear</option><option>Home & Living</option><option>Beauty & Grooming</option><option>Sports & Fitness</option><option>Books & Stationery</option><option>Watches & Jewellery</option><option>Toys & Kids</option></select></div>
+      </div>
+      <div class="fg-row">
+        <div class="fg"><label>Sub-Category</label><input type="text" placeholder="e.g. Trousers & Pants"></div>
+        <div class="fg"><label>Brand</label><input type="text" placeholder="e.g. Wrangler"></div>
+      </div>
+      <div class="fg-row">
+        <div class="fg"><label>SKU</label><input type="text" placeholder="e.g. CLT-CHN-M-001"></div>
+        <div class="fg"><label>HSN Code</label><input type="text" placeholder="e.g. 620342"></div>
+      </div>
+      <div class="fg-row">
+        <div class="fg"><label>Selling Price (₹)</label><input type="number" placeholder="1299"></div>
+        <div class="fg"><label>MRP (₹)</label><input type="number" placeholder="1799"></div>
+      </div>
+      <div class="fg-row3">
+        <div class="fg"><label>Stock Quantity</label><input type="number" placeholder="150"></div>
+        <div class="fg"><label>Reorder Point</label><input type="number" placeholder="20"></div>
+        <div class="fg"><label>GST Rate</label><select><option>5%</option><option>12%</option><option>18%</option><option>0%</option></select></div>
+      </div>
+      <div class="fg"><label>Sizes / Variants (if applicable)</label><input type="text" placeholder="e.g. XS, S, M, L, XL, XXL or 6, 7, 8, 9, 10"></div>
+      <div class="fg"><label>Colors</label><input type="text" placeholder="e.g. Navy Blue, Olive Green, Charcoal Grey"></div>
+      <div class="fg"><label>Description</label><textarea placeholder="Detailed product description, material, care instructions…"></textarea></div>
+      <div class="fg"><label>Product Images</label><div style="border:2px dashed var(--border2);border-radius:var(--r);padding:18px;text-align:center;color:var(--text3);font-size:12px;cursor:pointer;"><i class="fas fa-cloud-upload-alt" style="font-size:22px;margin-bottom:7px;display:block;color:var(--accent);"></i>Click to upload or drag & drop (Max 10 images, 4MB each)</div></div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-ghost" onclick="closeModal('addProductModal')">Cancel</button><button class="btn btn-warning btn-sm">Save as Draft</button><button class="btn btn-primary"><i class="fas fa-save"></i>Publish Product</button></div>
+  </div>
+</div>
+
+<!-- Add Employee -->
+<div class="modal-overlay" id="addEmpModal">
+  <div class="modal modal-lg">
+    <div class="modal-hd"><h3><i class="fas fa-user-plus" style="color:var(--accent);margin-right:8px;"></i>Add New Employee</h3><button class="modal-x" onclick="closeModal('addEmpModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="fg-row"><div class="fg"><label>Full Name</label><input type="text" placeholder="e.g. Amit Kumar Sharma"></div><div class="fg"><label>Employee ID</label><input type="text" placeholder="e.g. EMP-00039" value="EMP-00039"></div></div>
+      <div class="fg-row"><div class="fg"><label>Email Address</label><input type="email" placeholder="amit.sharma@boscenter.in"></div><div class="fg"><label>Phone Number</label><input type="text" placeholder="+91 9876543210"></div></div>
+      <div class="fg-row"><div class="fg"><label>Department</label><select><option>Technology</option><option>Operations</option><option>Sales</option><option>Customer Support</option><option>Warehouse</option><option>Finance</option><option>HR</option><option>Marketing</option></select></div><div class="fg"><label>Assign Role</label><select><option>Operations Manager</option><option>Sales Manager</option><option>Support Agent</option><option>Warehouse Staff</option><option>Finance Analyst</option><option>Marketing Manager</option><option>Developer</option></select></div></div>
+      <div class="fg-row"><div class="fg"><label>Date of Joining</label><input type="date"></div><div class="fg"><label>Reporting Manager</label><select><option>Priya Mehta (COO)</option><option>Rahul Singh (CTO)</option><option>Anjali Verma (CFO)</option><option>Vikram Joshi (Ops Head)</option></select></div></div>
+      <div class="fg-row"><div class="fg"><label>Designation</label><input type="text" placeholder="e.g. Senior Support Agent"></div><div class="fg"><label>Employment Type</label><select><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Intern</option></select></div></div>
+      <div class="fg"><label>Address</label><input type="text" placeholder="Work / Correspondence address"></div>
+      <div class="fg"><label>Emergency Contact</label><input type="text" placeholder="Name & Phone number"></div>
+      <div class="fg"><label>Notes / Remarks</label><textarea placeholder="Any onboarding notes, permissions override, etc."></textarea></div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-ghost" onclick="closeModal('addEmpModal')">Cancel</button><button class="btn btn-primary"><i class="fas fa-user-check"></i>Create Employee</button></div>
+  </div>
+</div>
+
+<!-- Add Role -->
+<div class="modal-overlay" id="addRoleModal">
+  <div class="modal">
+    <div class="modal-hd"><h3><i class="fas fa-shield-alt" style="color:var(--accent);margin-right:8px;"></i>Create New Role</h3><button class="modal-x" onclick="closeModal('addRoleModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="fg"><label>Role Name</label><input type="text" placeholder="e.g. Regional Sales Manager"></div>
+      <div class="fg"><label>Description</label><textarea placeholder="Describe what this role can do…" style="min-height:60px;"></textarea></div>
+      <div class="fg"><label>Base Role (inherit permissions)</label><select><option>— None —</option><option>Operations Manager</option><option>Sales Manager</option><option>Support Agent</option></select></div>
+      <div class="fg"><label>Assign Department</label><select><option>Sales</option><option>Operations</option><option>Technology</option><option>Finance</option><option>HR</option></select></div>
+      <div class="fg"><label>Access Level</label><select><option>Read Only</option><option>Read + Write</option><option>Read + Write + Delete</option><option>Full Access</option></select></div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-ghost" onclick="closeModal('addRoleModal')">Cancel</button><button class="btn btn-primary"><i class="fas fa-plus"></i>Create Role</button></div>
+  </div>
+</div>
+
+<!-- Add Category -->
+<div class="modal-overlay" id="addCatModal">
+  <div class="modal">
+    <div class="modal-hd"><h3><i class="fas fa-tags" style="color:var(--accent);margin-right:8px;"></i>Add Category</h3><button class="modal-x" onclick="closeModal('addCatModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="fg"><label>Category Name</label><input type="text" placeholder="e.g. Pet Supplies"></div>
+      <div class="fg"><label>Parent Category (if sub-category)</label><select><option>— Top Level —</option><option>Clothing</option><option>Electronics</option><option>Footwear</option><option>Home & Living</option></select></div>
+      <div class="fg"><label>Category Slug</label><input type="text" placeholder="e.g. pet-supplies"></div>
+      <div class="fg"><label>Description</label><textarea placeholder="Category description…" style="min-height:60px;"></textarea></div>
+      <div class="fg"><label>Display Order</label><input type="number" placeholder="1"></div>
+      <div class="fg"><label>Category Image</label><div style="border:2px dashed var(--border2);border-radius:var(--r);padding:14px;text-align:center;color:var(--text3);font-size:12px;cursor:pointer;"><i class="fas fa-cloud-upload-alt" style="margin-bottom:5px;display:block;color:var(--accent);"></i>Upload category banner</div></div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-ghost" onclick="closeModal('addCatModal')">Cancel</button><button class="btn btn-primary"><i class="fas fa-save"></i>Save Category</button></div>
+  </div>
+</div>
+
+<!-- Coupon Modal -->
+<div class="modal-overlay" id="couponModal">
+  <div class="modal">
+    <div class="modal-hd"><h3><i class="fas fa-ticket-alt" style="color:var(--accent);margin-right:8px;"></i>Create Coupon</h3><button class="modal-x" onclick="closeModal('couponModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="fg-row"><div class="fg"><label>Coupon Code</label><input type="text" placeholder="e.g. SUMMER25"></div><div class="fg"><label>Discount Type</label><select><option>Percentage (%)</option><option>Fixed Amount (₹)</option><option>Free Shipping</option><option>BOGO</option></select></div></div>
+      <div class="fg-row"><div class="fg"><label>Discount Value</label><input type="number" placeholder="25"></div><div class="fg"><label>Min Order Value (₹)</label><input type="number" placeholder="999"></div></div>
+      <div class="fg-row"><div class="fg"><label>Max Discount (₹)</label><input type="number" placeholder="750"></div><div class="fg"><label>Usage Limit</label><input type="number" placeholder="500"></div></div>
+      <div class="fg-row"><div class="fg"><label>Valid From</label><input type="date"></div><div class="fg"><label>Valid Until</label><input type="date"></div></div>
+      <div class="fg-row"><div class="fg"><label>Applicable Categories</label><select><option>All Categories</option><option>Clothing only</option><option>Electronics only</option><option>Footwear only</option></select></div><div class="fg"><label>Customer Segment</label><select><option>All Customers</option><option>New Customers Only</option><option>VIP / Platinum</option><option>First-time Buyers</option></select></div></div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-ghost" onclick="closeModal('couponModal')">Cancel</button><button class="btn btn-primary"><i class="fas fa-ticket-alt"></i>Create Coupon</button></div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATA LAYER
+// ═══════════════════════════════════════════════════════
+
+const DASH_KPIS=[
+  {icon:'fas fa-rupee-sign',bg:'#059669',c:'#059669',val:'₹24.8L',lbl:'Total Revenue',trend:'+22.4%',up:true,sub:'All time'},
+  {icon:'fas fa-shopping-bag',bg:'#1d4ed8',c:'#1d4ed8',val:'2,104',lbl:'Total Orders',trend:'+12 today',up:true,sub:'44 pending'},
+  {icon:'fas fa-users',bg:'#0891b2',c:'#0891b2',val:'2,847',lbl:'Customers',trend:'+94 this week',up:true,sub:'892 repeat'},
+  {icon:'fas fa-box-open',bg:'#7c3aed',c:'#7c3aed',val:'3,418',lbl:'Products',trend:'7 low stock',up:false,sub:'2 out of stock'},
+  {icon:'fas fa-user-tie',bg:'#d97706',c:'#d97706',val:'38',lbl:'Employees',trend:'2 on leave',up:true,sub:'34 active'},
+  {icon:'fas fa-check-circle',bg:'#0d9488',c:'#0d9488',val:'96.1%',lbl:'Delivery Rate',trend:'+0.8% MoM',up:true,sub:'2,022 delivered'},
+];
+
+const PRODUCTS=[
+  {img:'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=34&h=34&fit=crop',name:"Men's Slim Fit Chinos",cat:'Clothing',sub:'Trousers',sku:'CLT-CHN-M-001',stock:142,price:'₹1,299',mrp:'₹1,799',sales:284,rating:4.5,status:'active'},
+  {img:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=34&h=34&fit=crop',name:'Titan Raga Rose Gold Watch',cat:'Watches',sub:'Analogue',sku:'WTC-TIT-001',stock:28,price:'₹8,995',mrp:'₹10,995',sales:61,rating:4.7,status:'active'},
+  {img:'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=34&h=34&fit=crop',name:'HP Victus Ryzen 7 Laptop',cat:'Electronics',sub:'Laptops',sku:'ELC-LAP-001',stock:8,price:'₹52,000',mrp:'₹58,000',sales:34,rating:4.6,status:'active'},
+  {img:'https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=34&h=34&fit=crop',name:'Nike Air Max 270',cat:'Footwear',sub:'Running Shoes',sku:'FTW-NK-022',stock:74,price:'₹9,495',mrp:'₹11,495',sales:182,rating:4.5,status:'active'},
+  {img:'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=34&h=34&fit=crop',name:'Minimalist Perfume Set',cat:'Beauty',sub:'Fragrances',sku:'BTY-PRF-001',stock:56,price:'₹2,499',mrp:'₹3,200',sales:124,rating:4.3,status:'active'},
+  {img:'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=34&h=34&fit=crop',name:'Sony WH-1000XM5',cat:'Electronics',sub:'Headphones',sku:'ELC-AUD-002',stock:0,price:'₹28,990',mrp:'₹34,990',sales:44,rating:4.9,status:'inactive'},
+  {img:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=34&h=34&fit=crop',name:'Nordic Kitchen Knife Set',cat:'Home & Living',sub:'Kitchen',sku:'HOM-KIT-001',stock:34,price:'₹3,499',mrp:'₹4,499',sales:77,rating:4.4,status:'active'},
+  {img:'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=34&h=34&fit=crop',name:"Women's Floral Kurti",cat:'Clothing',sub:'Ethnic Wear',sku:'CLT-KUR-W-008',stock:3,price:'₹799',mrp:'₹1,199',sales:348,rating:4.6,status:'active'},
+  {img:'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=34&h=34&fit=crop',name:'Adidas Ultraboost 22',cat:'Footwear',sub:'Performance',sku:'FTW-ADB-011',stock:18,price:'₹12,999',mrp:'₹15,999',sales:93,rating:4.7,status:'active'},
+  {img:'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=34&h=34&fit=crop',name:'Yoga Mat Premium',cat:'Sports',sub:'Yoga',sku:'SPT-YGA-003',stock:62,price:'₹1,899',mrp:'₹2,499',sales:156,rating:4.8,status:'active'},
+  {img:'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=34&h=34&fit=crop',name:'Fujifilm Instax Mini 12',cat:'Electronics',sub:'Cameras',sku:'ELC-CAM-003',stock:14,price:'₹7,999',mrp:'₹9,499',sales:42,rating:4.6,status:'active'},
+  {img:'https://images.unsplash.com/photo-1619086303291-0ef7699e4b31?w=34&h=34&fit=crop',name:'Vitamin C Serum 30ml',cat:'Beauty',sub:'Skincare',sku:'BTY-SKN-012',stock:2,price:'₹699',mrp:'₹999',sales:428,rating:4.8,status:'active'},
+];
+
+const ORDERS=[
+  {id:'ORD-2104',cust:'Rahul Sharma',prod:'HP Victus Ryzen 7',cat:'Electronics',date:'05-05-2026',amt:'₹52,000',pay:'UPI',del:'Express',status:'pending'},
+  {id:'ORD-2103',cust:'Priya Nair',prod:"Women's Floral Kurti",cat:'Clothing',date:'05-05-2026',amt:'₹799',pay:'UPI',del:'Standard',status:'delivered'},
+  {id:'ORD-2102',cust:'Arjun Patel',prod:'Nike Air Max 270',cat:'Footwear',date:'04-05-2026',amt:'₹9,495',pay:'Credit Card',del:'Express',status:'shipped'},
+  {id:'ORD-2101',cust:'Sneha Reddy',prod:'Vitamin C Serum',cat:'Beauty',date:'04-05-2026',amt:'₹699',pay:'UPI',del:'Standard',status:'delivered'},
+  {id:'ORD-2100',cust:'Vikram Joshi',prod:'Yoga Mat Premium',cat:'Sports',date:'04-05-2026',amt:'₹1,899',pay:'EMI',del:'Standard',status:'processing'},
+  {id:'ORD-2099',cust:'Kavya Iyer',prod:'Nordic Knife Set',cat:'Home & Living',date:'03-05-2026',amt:'₹3,499',pay:'Net Banking',del:'Standard',status:'delivered'},
+  {id:'ORD-2098',cust:'Rohan Gupta',prod:'Titan Raga Watch',cat:'Watches',date:'03-05-2026',amt:'₹8,995',pay:'COD',del:'Express',status:'shipped'},
+  {id:'ORD-2097',cust:'Anjali Singh',prod:'Sony WH-1000XM5',cat:'Electronics',date:'02-05-2026',amt:'₹28,990',pay:'Credit Card',del:'Express',status:'processing'},
+  {id:'ORD-2096',cust:'Dev Mehta',prod:'Adidas Ultraboost 22',cat:'Footwear',date:'02-05-2026',amt:'₹12,999',pay:'UPI',del:'Standard',status:'delivered'},
+  {id:'ORD-2095',cust:'Ritu Sharma',prod:'Men\'s Slim Chinos',cat:'Clothing',date:'01-05-2026',amt:'₹1,299',pay:'UPI',del:'Standard',status:'delivered'},
+  {id:'ORD-2094',cust:'Aditya Kumar',prod:'Minimalist Perfume Set',cat:'Beauty',date:'01-05-2026',amt:'₹2,499',pay:'Net Banking',del:'Standard',status:'cancelled'},
+  {id:'ORD-2093',cust:'Neha Bhatt',prod:'Fujifilm Instax Mini 12',cat:'Electronics',date:'30-04-2026',amt:'₹7,999',pay:'Credit Card',del:'Express',status:'delivered'},
+  {id:'ORD-2092',cust:'Kiran Rao',prod:'HP Victus Ryzen 7',cat:'Electronics',date:'30-04-2026',amt:'₹52,000',pay:'EMI',del:'Express',status:'delivered'},
+  {id:'ORD-2091',cust:'Meera Thomas',prod:"Women's Floral Kurti",cat:'Clothing',date:'29-04-2026',amt:'₹799',pay:'UPI',del:'Standard',status:'returned'},
+  {id:'ORD-2090',cust:'Sanjay Verma',prod:'Yoga Mat Premium',cat:'Sports',date:'29-04-2026',amt:'₹1,899',pay:'COD',del:'Standard',status:'delivered'},
+];
+
+const CUSTOMERS=[
+  {name:'Rahul Sharma',email:'rahul.sharma@gmail.com',phone:'9876543210',loc:'Mumbai, MH',orders:24,spent:'₹4,84,200',seg:'VIP',joined:'Jan 2024',status:'active'},
+  {name:'Priya Nair',email:'priya.nair@email.com',phone:'8765432109',loc:'Chennai, TN',orders:8,spent:'₹18,400',seg:'Regular',joined:'Mar 2024',status:'active'},
+  {name:'Arjun Patel',email:'arjun.patel@gmail.com',phone:'7654321098',loc:'Ahmedabad, GJ',orders:14,spent:'₹1,24,000',seg:'Gold',joined:'Feb 2024',status:'active'},
+  {name:'Sneha Reddy',email:'sneha.reddy@email.com',phone:'9543210987',loc:'Hyderabad, TS',orders:6,spent:'₹38,490',seg:'Regular',joined:'May 2024',status:'active'},
+  {name:'Vikram Joshi',email:'vikram.joshi@gmail.com',phone:'8432109876',loc:'Pune, MH',orders:3,spent:'₹9,200',seg:'New',joined:'Apr 2026',status:'active'},
+  {name:'Kavya Iyer',email:'kavya.iyer@gmail.com',phone:'7321098765',loc:'Bangalore, KA',orders:18,spent:'₹2,14,000',seg:'Gold',joined:'Dec 2023',status:'active'},
+  {name:'Rohan Gupta',email:'rohan.gupta@email.com',phone:'9210987654',loc:'Kolkata, WB',orders:2,spent:'₹11,200',seg:'At Risk',joined:'Jun 2024',status:'active'},
+  {name:'Anjali Singh',email:'anjali.singh@gmail.com',phone:'8109876543',loc:'Delhi, DL',orders:36,spent:'₹8,42,000',seg:'VIP',joined:'Oct 2023',status:'active'},
+  {name:'Dev Mehta',email:'dev.mehta@email.com',phone:'9988776655',loc:'Surat, GJ',orders:0,spent:'₹0',seg:'Churned',joined:'Sep 2024',status:'inactive'},
+  {name:'Neha Bhatt',email:'neha.bhatt@gmail.com',phone:'9876501234',loc:'Jaipur, RJ',orders:11,spent:'₹64,800',seg:'Regular',joined:'Jan 2025',status:'active'},
+];
+
+const EMPLOYEES=[
+  {name:'Priya Mehta',id:'EMP-00001',dept:'Operations',role:'Operations Manager',email:'priya.m@boscenter.in',phone:'9876540001',join:'15 Jan 2022',lastLogin:'Today 9:02 AM',status:'active'},
+  {name:'Rahul Singh',id:'EMP-00002',dept:'Technology',role:'Lead Developer',email:'rahul.s@boscenter.in',phone:'9876540002',join:'20 Mar 2022',lastLogin:'Today 8:48 AM',status:'active'},
+  {name:'Anjali Verma',id:'EMP-00003',dept:'Finance',role:'Finance Analyst',email:'anjali.v@boscenter.in',phone:'9876540003',join:'01 Jul 2022',lastLogin:'Today 10:15 AM',status:'active'},
+  {name:'Vikram Joshi',id:'EMP-00004',dept:'Warehouse',role:'Warehouse Manager',email:'vikram.j@boscenter.in',phone:'9876540004',join:'10 Sep 2022',lastLogin:'Yesterday 6:30 PM',status:'active'},
+  {name:'Sneha Kumar',id:'EMP-00005',dept:'Customer Support',role:'Support Lead',email:'sneha.k@boscenter.in',phone:'9876540005',join:'14 Nov 2022',lastLogin:'Today 9:30 AM',status:'active'},
+  {name:'Arjun Nair',id:'EMP-00006',dept:'Sales',role:'Sales Manager',email:'arjun.n@boscenter.in',phone:'9876540006',join:'02 Jan 2023',lastLogin:'Today 11:00 AM',status:'active'},
+  {name:'Kavya Shah',id:'EMP-00007',dept:'Marketing',role:'Marketing Manager',email:'kavya.s@boscenter.in',phone:'9876540007',join:'18 Feb 2023',lastLogin:'Today 8:20 AM',status:'active'},
+  {name:'Rohit Dev',id:'EMP-00008',dept:'Technology',role:'Backend Developer',email:'rohit.d@boscenter.in',phone:'9876540008',join:'05 Mar 2023',lastLogin:'Today 9:45 AM',status:'active'},
+  {name:'Meera Pillai',id:'EMP-00009',dept:'Customer Support',role:'Support Agent',email:'meera.p@boscenter.in',phone:'9876540009',join:'22 Apr 2023',lastLogin:'Today 10:00 AM',status:'active'},
+  {name:'Sanjay Bose',id:'EMP-00010',dept:'HR',role:'HR Manager',email:'sanjay.b@boscenter.in',phone:'9876540010',join:'11 Jun 2023',lastLogin:'Today 9:10 AM',status:'active'},
+  {name:'Deepa Rao',id:'EMP-00011',dept:'Operations',role:'Operations Analyst',email:'deepa.r@boscenter.in',phone:'9876540011',join:'30 Jul 2023',lastLogin:'Yesterday 5:00 PM',status:'on leave'},
+  {name:'Nikhil Sharma',id:'EMP-00012',dept:'Sales',role:'Sales Executive',email:'nikhil.s@boscenter.in',phone:'9876540012',join:'14 Aug 2023',lastLogin:'Today 8:55 AM',status:'active'},
+  {name:'Pooja Gupta',id:'EMP-00013',dept:'Marketing',role:'Content Strategist',email:'pooja.g@boscenter.in',phone:'9876540013',join:'01 Oct 2023',lastLogin:'3 days ago',status:'on leave'},
+  {name:'Kiran Patel',id:'EMP-00014',dept:'Warehouse',role:'Inventory Specialist',email:'kiran.p@boscenter.in',phone:'9876540014',join:'20 Nov 2023',lastLogin:'Today 7:30 AM',status:'active'},
+  {name:'Ravi Dubey',id:'EMP-00015',dept:'Customer Support',role:'Support Agent',email:'ravi.d@boscenter.in',phone:'9876540015',join:'08 Dec 2023',lastLogin:'Never',status:'suspended'},
+];
+
+const ROLES=[
+  {name:'Super Admin',emp:1,perms:48,by:'System',created:'01 Jan 2022',modified:'—',status:'active'},
+  {name:'Operations Manager',emp:3,perms:36,by:'BOS Admin',created:'15 Jan 2022',modified:'10 Mar 2026',status:'active'},
+  {name:'Finance Analyst',emp:4,perms:22,by:'BOS Admin',created:'01 Jul 2022',modified:'14 Feb 2026',status:'active'},
+  {name:'Sales Manager',emp:5,perms:28,by:'BOS Admin',created:'02 Jan 2023',modified:'01 Apr 2026',status:'active'},
+  {name:'Support Agent',emp:9,perms:18,by:'Priya Mehta',created:'22 Apr 2023',modified:'20 Apr 2026',status:'active'},
+  {name:'Warehouse Staff',emp:6,perms:14,by:'Priya Mehta',created:'20 Nov 2023',modified:'05 Mar 2026',status:'active'},
+  {name:'Marketing Manager',emp:3,perms:24,by:'Sanjay Bose',created:'01 Oct 2023',modified:'12 Apr 2026',status:'active'},
+  {name:'Developer',emp:4,perms:30,by:'Rahul Singh',created:'05 Mar 2023',modified:'02 May 2026',status:'active'},
+  {name:'Content Reviewer',emp:2,perms:10,by:'Kavya Shah',created:'01 Jan 2024',modified:'01 Jan 2024',status:'inactive'},
+  {name:'Read-Only Auditor',emp:1,perms:6,by:'BOS Admin',created:'14 Mar 2024',modified:'14 Mar 2024',status:'active'},
+];
+
+const RBAC_PERMS={
+  modules:['Dashboard','Orders','Products','Inventory','Customers','Analytics','Payments','Shipping','Returns','Coupons','Reviews','Support','Employees','RBAC','Audit Logs','Settings'],
+  roles:{
+    'Super Admin':            [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+    'Operations Manager':     [2,3,3,3,2,2,2,3,3,3,2,2,2,0,2,1],
+    'Sales Manager':          [2,2,3,1,2,3,1,1,2,3,2,0,0,0,0,0],
+    'Support Agent':          [1,1,0,0,2,0,0,0,2,0,3,2,0,0,0,0],
+    'Warehouse Staff':        [1,1,1,3,0,0,0,2,1,0,0,0,0,0,0,0],
+    'Finance Analyst':        [2,2,0,0,1,3,3,0,1,1,0,0,0,0,2,0],
+    'Marketing Manager':      [2,1,2,0,2,2,0,0,0,3,2,0,0,0,0,0],
+  }
+};
+// 0=none, 1=read, 2=read+write, 3=full
+
+const AUDIT_LOGS=[
+  {ts:'2026-05-06 11:42:18',actor:'Priya Mehta',role:'Operations Manager',module:'Orders',action:'APPROVE',target:'ORD-2104 — HP Victus Ryzen 7',ip:'192.168.1.42',sev:'info'},
+  {ts:'2026-05-06 11:38:55',actor:'Rahul Singh',role:'Lead Developer',module:'Settings',action:'UPDATE',target:'Payment Gateway — Razorpay keys rotated',ip:'192.168.1.11',sev:'warning'},
+  {ts:'2026-05-06 11:24:10',actor:'Anjali Verma',role:'Finance Analyst',module:'Payments',action:'EXPORT',target:'Settlement report — May 2026',ip:'192.168.1.23',sev:'info'},
+  {ts:'2026-05-06 11:18:02',actor:'Vikram Joshi',role:'Warehouse Manager',module:'Inventory',action:'UPDATE',target:'HP Victus Ryzen 7 — +50 units added',ip:'10.0.0.15',sev:'info'},
+  {ts:'2026-05-06 11:10:44',actor:'BOS Admin',role:'Super Admin',module:'RBAC',action:'UPDATE',target:"Support Agent role — Reviews permission changed",ip:'172.16.0.1',sev:'critical'},
+  {ts:'2026-05-06 11:05:31',actor:'Sneha Kumar',role:'Support Lead',module:'Support',action:'RESOLVE',target:'TKT-812 — Kavya Nair payment issue',ip:'192.168.1.56',sev:'info'},
+  {ts:'2026-05-06 10:58:19',actor:'Arjun Nair',role:'Sales Manager',module:'Coupons',action:'CREATE',target:'SUMMER25 — 25% off clothing (500 uses)',ip:'192.168.1.8',sev:'info'},
+  {ts:'2026-05-06 10:44:02',actor:'Kavya Shah',role:'Marketing Manager',module:'Products',action:'UPDATE',target:"Women's Floral Kurti — price changed ₹1,099→₹799",ip:'192.168.1.34',sev:'warning'},
+  {ts:'2026-05-06 10:32:58',actor:'System',role:'Automated',module:'Inventory',action:'ALERT',target:'Vitamin C Serum 30ml — stock below reorder point (2 units)',ip:'127.0.0.1',sev:'warning'},
+  {ts:'2026-05-06 10:21:14',actor:'BOS Admin',role:'Super Admin',module:'Employees',action:'CREATE',target:'EMP-00039 — Amit Kumar Sharma (Support Agent)',ip:'172.16.0.1',sev:'info'},
+  {ts:'2026-05-06 10:14:30',actor:'Meera Pillai',role:'Support Agent',module:'Returns',action:'APPROVE',target:'RET-091 — Priya Nair, Women\'s Floral Kurti',ip:'192.168.1.57',sev:'info'},
+  {ts:'2026-05-06 10:08:22',actor:'Rohit Dev',role:'Backend Developer',module:'Settings',action:'UPDATE',target:'WhatsApp Business API — webhook endpoint updated',ip:'192.168.1.12',sev:'info'},
+  {ts:'2026-05-06 09:58:47',actor:'Ravi Dubey',role:'Support Agent',module:'Customers',action:'LOGIN',target:'Unauthorised access attempt — account suspended',ip:'203.0.113.45',sev:'critical'},
+  {ts:'2026-05-06 09:48:11',actor:'Priya Mehta',role:'Operations Manager',module:'Shipping',action:'UPDATE',target:'ORD-2102 shipment — courier changed to Blue Dart',ip:'192.168.1.42',sev:'info'},
+  {ts:'2026-05-06 09:40:03',actor:'Sanjay Bose',role:'HR Manager',module:'Employees',action:'UPDATE',target:'Deepa Rao — Leave status updated: On Leave',ip:'192.168.1.22',sev:'info'},
+  {ts:'2026-05-06 09:31:29',actor:'BOS Admin',role:'Super Admin',module:'Products',action:'DELETE',target:'SKU: ELC-OLD-009 — Discontinued product removed',ip:'172.16.0.1',sev:'warning'},
+  {ts:'2026-05-06 09:22:18',actor:'Anjali Verma',role:'Finance Analyst',module:'Analytics',action:'EXPORT',target:'Q1 FY2026 revenue report — downloaded',ip:'192.168.1.23',sev:'info'},
+  {ts:'2026-05-06 09:15:44',actor:'Arjun Nair',role:'Sales Manager',module:'Customers',action:'UPDATE',target:'Rahul Sharma — segment updated: Regular→VIP',ip:'192.168.1.8',sev:'info'},
+  {ts:'2026-05-06 09:10:02',actor:'System',role:'Automated',module:'Orders',action:'CANCEL',target:'ORD-2094 — Auto-cancelled (payment timeout 30 min)',ip:'127.0.0.1',sev:'info'},
+  {ts:'2026-05-06 09:02:11',actor:'Priya Mehta',role:'Operations Manager',module:'Settings',action:'LOGIN',target:'Admin login — successful',ip:'192.168.1.42',sev:'info'},
+];
+
+const NOTIFS=[
+  {icon:'fas fa-shopping-bag',ib:'#dbeafe',ic:'#1d4ed8',title:'New Order #ORD-2104',text:'HP Victus Ryzen 7 — ₹52,000 awaiting approval',time:'5 min ago',unread:true},
+  {icon:'fas fa-exclamation-triangle',ib:'#fef3c7',ic:'#d97706',title:'Low Stock Alert',text:'Vitamin C Serum — only 2 units remaining',time:'22 min ago',unread:true},
+  {icon:'fas fa-shield-alt',ib:'#fee2e2',ic:'#dc2626',title:'Security Alert',text:'Ravi Dubey (EMP-00015) — unauthorised login attempt detected',time:'35 min ago',unread:true},
+  {icon:'fas fa-undo',ib:'#fee2e2',ic:'#dc2626',title:'Return Request #RET-091',text:'Priya Nair requested return — Women\'s Floral Kurti',time:'1 hr ago',unread:true},
+  {icon:'fas fa-user-tie',ib:'#f5f3ff',ic:'#7c3aed',title:'Employee Onboarded',text:'Amit Kumar Sharma added as Support Agent — EMP-00039',time:'2 hr ago',unread:true},
+  {icon:'fas fa-star',ib:'#fef3c7',ic:'#d97706',title:'New Review',text:'Yoga Mat Premium — 5-star review by Vikram Joshi',time:'3 hr ago',unread:true},
+  {icon:'fas fa-check-circle',ib:'#ecfdf5',ic:'#059669',title:'Settlement Done',text:'₹2,84,500 settled to 14 retailers',time:'4 hr ago',unread:false},
+  {icon:'fas fa-headset',ib:'#fdf2f8',ic:'#db2777',title:'Support Escalation',text:'TKT-812 escalated — Kavya Iyer, payment gateway issue',time:'5 hr ago',unread:false},
+  {icon:'fas fa-user-check',ib:'#ecfdf5',ic:'#059669',title:'KYC Approved',text:'Retailer Suresh Kumar KYC verification completed',time:'6 hr ago',unread:false},
+];
+
+const CATEGORIES=[
+  {name:'Clothing',icon:'fas fa-tshirt',sub:14,products:842,rev:'₹6.4L',status:'active',c:'#1d4ed8'},
+  {name:'Electronics',icon:'fas fa-laptop',sub:12,products:284,rev:'₹9.2L',status:'active',c:'#7c3aed'},
+  {name:'Footwear',icon:'fas fa-shoe-prints',sub:8,products:312,rev:'₹4.1L',status:'active',c:'#059669'},
+  {name:'Home & Living',icon:'fas fa-home',sub:18,products:428,rev:'₹2.8L',status:'active',c:'#0891b2'},
+  {name:'Beauty & Grooming',icon:'fas fa-spa',sub:10,products:524,rev:'₹1.9L',status:'active',c:'#db2777'},
+  {name:'Sports & Fitness',icon:'fas fa-dumbbell',sub:9,products:284,rev:'₹1.4L',status:'active',c:'#d97706'},
+  {name:'Watches & Jewellery',icon:'fas fa-gem',sub:6,products:148,rev:'₹1.8L',status:'active',c:'#0d9488'},
+  {name:'Books & Stationery',icon:'fas fa-book',sub:5,products:214,rev:'₹0.6L',status:'active',c:'#7c3aed'},
+  {name:'Toys & Kids',icon:'fas fa-baby',sub:7,products:182,rev:'₹0.8L',status:'active',c:'#ea580c'},
+  {name:'Others',icon:'fas fa-ellipsis-h',sub:3,products:200,rev:'₹0.3L',status:'inactive',c:'#8492a6'},
+];
+
+// ═══════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════
+function sb(s){
+  const m={pending:'b-pending',processing:'b-processing',shipped:'b-shipped',delivered:'b-delivered',cancelled:'b-failed',active:'b-active',inactive:'b-inactive',returned:'b-returned',draft:'b-draft',open:'b-pending','in progress':'b-processing',resolved:'b-success',closed:'b-closed',approved:'b-approved',rejected:'b-rejected',suspended:'b-orange','on leave':'b-info',terminated:'b-failed',admin:'b-admin','super admin':'b-admin','vip':'b-purple','gold':'b-orange','regular':'b-processing','new':'b-success','at risk':'b-pending','churned':'b-inactive',critical:'b-failed',warning:'b-pending',info:'b-info'};
+  return `<span class="badge ${m[s.toLowerCase()]||'b-inactive'}">${s.charAt(0).toUpperCase()+s.slice(1)}</span>`;
+}
+function kpiHTML(k){return `<div class="kpi" style="--kpi-c:${k.c||k.bg}"><div class="kpi-top"><div class="kpi-icon" style="background:${k.bg}"><i class="${k.icon}"></i></div><span class="kpi-trend ${k.up?'trend-up':'trend-dn'}"><i class="fas fa-arrow-${k.up?'up':'down'}"></i>${k.trend}</span></div><div class="kpi-val">${k.val}</div><div class="kpi-lbl">${k.lbl}</div>${k.sub?`<div class="kpi-sub">${k.sub}</div>`:''}</div>`;}
+function stars(r){return '★'.repeat(Math.round(r))+'☆'.repeat(5-Math.round(r));}
+const AV_COLORS=['#1d4ed8','#7c3aed','#059669','#0891b2','#d97706','#db2777','#dc2626','#0d9488','#ea580c'];
+function avColor(name){return AV_COLORS[name.charCodeAt(0)%AV_COLORS.length];}
+
+// ═══════════════════════════════════════════════════════
+// RENDER FUNCTIONS
+// ═══════════════════════════════════════════════════════
+function renderDashKpis(){document.getElementById('kpi-dash').innerHTML=DASH_KPIS.map(kpiHTML).join('');}
+
+function renderRecentOrders(){
+  const imgs=['https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=40&h=40&fit=crop','https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=40&h=40&fit=crop','https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=40&h=40&fit=crop','https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=40&h=40&fit=crop','https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=40&h=40&fit=crop'];
+  document.getElementById('recent-orders-list').innerHTML=ORDERS.slice(0,5).map((o,i)=>`<div class="ro"><img class="ro-img" src="${imgs[i%imgs.length]}" alt=""><div style="flex:1;min-width:0;"><div class="ro-name">${o.prod} <span style="font-size:10px;background:var(--surface3);padding:1px 6px;border-radius:10px;color:var(--text3);">${o.cat}</span></div><div class="ro-meta">${o.id} · ${o.cust} · ${o.date}</div></div><div style="text-align:right;"><div class="ro-price">${o.amt}</div><div style="margin-top:3px;">${sb(o.status)}</div></div></div>`).join('');
+}
+
+function renderTopProducts(){
+  const data=[{ic:'fas fa-tshirt',bg:'#1d4ed8',name:"Women's Floral Kurti",val:'₹3.78L',pct:85},{ic:'fas fa-running',bg:'#059669',name:'Nike Air Max 270',val:'₹17.27L',pct:78},{ic:'fas fa-laptop',bg:'#7c3aed',name:'HP Victus Ryzen 7',val:'₹15.86L',pct:70},{ic:'fas fa-vial',bg:'#db2777',name:'Vitamin C Serum',val:'₹2.99L',pct:58},{ic:'fas fa-dumbbell',bg:'#d97706',name:'Yoga Mat Premium',val:'₹2.96L',pct:44}];
+  document.getElementById('top-products-body').innerHTML=data.map(d=>`<div class="top-row"><div class="top-icon" style="background:${d.bg}"><i class="${d.ic}"></i></div><div style="flex:1;"><div style="display:flex;justify-content:space-between;"><span class="top-name">${d.name}</span><span class="top-val">${d.val}</span></div><div class="pbar"><div class="pbar-fill" style="width:${d.pct}%;background:${d.bg};"></div></div></div></div>`).join('');
+}
+
+function renderTopLocations(){
+  const locs=[{city:'Mumbai',state:'MH',orders:484,pct:80},{city:'Bangalore',state:'KA',orders:392,pct:65},{city:'Delhi NCR',state:'DL',orders:348,pct:57},{city:'Hyderabad',state:'TS',orders:286,pct:47},{city:'Pune',state:'MH',orders:194,pct:32}];
+  document.getElementById('top-locations-body').innerHTML=locs.map(l=>`<div class="top-row"><div class="top-icon" style="background:var(--surface2);color:var(--text3);font-size:10px;font-family:var(--mono);">${l.state}</div><div style="flex:1;"><div style="display:flex;justify-content:space-between;"><span class="top-name">${l.city}</span><span class="top-val">${l.orders} orders</span></div><div class="pbar"><div class="pbar-fill" style="width:${l.pct}%;background:#0891b2;"></div></div></div></div>`).join('');
+}
+
+function renderCustStats(){
+  const rows=[{l:'Active this month',v:'1,428',c:'var(--green)'},{l:'New this month',v:'184',c:'var(--accent)'},{l:'Average Order Value',v:'₹22,840',c:'var(--purple)'},{l:'Customer Lifetime Value (avg)',v:'₹58,200',c:'var(--yellow)'}];
+  document.getElementById('cust-stat-rows').innerHTML=rows.map(r=>`<div class="stat-row"><span class="stat-label">${r.l}</span><span class="stat-value" style="color:${r.c}">${r.v}</span></div>`).join('');
+}
+
+function renderFinanceRetailers(){
+  const rs=[{n:'Suresh Kumar',b:'₹1,04,200',t:'+₹8,200'},{n:'Priya Distributors',b:'₹82,800',t:'+₹3,800'},{n:'Mehta Telecom',b:'₹64,500',t:'-₹1,200'},{n:'StarLink Mobile',b:'₹48,900',t:'+₹6,100'}];
+  document.getElementById('finance-retailer-list').innerHTML=`<div style="font-size:9.5px;font-weight:700;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:7px;">Top Retailer Balances</div>`+rs.map(r=>`<div class="stat-row"><div style="display:flex;align-items:center;gap:7px;"><div style="width:26px;height:26px;background:var(--accent-l);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--accent);">${r.n[0]}</div><span class="stat-label">${r.n}</span></div><div style="text-align:right;"><div class="stat-value">${r.b}</div><div style="font-size:10.5px;font-weight:600;color:${r.t.startsWith('+')?'var(--green)':'var(--red)'};">${r.t}</div></div></div>`).join('');
+}
+
+function renderNotifications(){
+  document.getElementById('notifList').innerHTML=NOTIFS.map(n=>`<div class="notif-item ${n.unread?'unread':''}"><div class="notif-ic" style="background:${n.ib};color:${n.ic}"><i class="${n.icon}"></i></div><div class="notif-txt"><h4>${n.title}</h4><p>${n.text}</p><div class="notif-time"><i class="fas fa-clock" style="margin-right:3px;"></i>${n.time}</div></div>${n.unread?'<div class="unread-dot"></div>':''}</div>`).join('');
+}
+
+function renderOrdersTable(){
+  document.getElementById('order-kpis').innerHTML=[
+    {icon:'fas fa-shopping-bag',bg:'#1d4ed8',c:'#1d4ed8',val:'2,104',lbl:'Total Orders',trend:'+12 today',up:true,sub:''},
+    {icon:'fas fa-clock',bg:'#d97706',c:'#d97706',val:'44',lbl:'Pending',trend:'Review now',up:false,sub:''},
+    {icon:'fas fa-truck',bg:'#7c3aed',c:'#7c3aed',val:'128',lbl:'Shipped',trend:'In transit',up:true,sub:''},
+    {icon:'fas fa-check-circle',bg:'#059669',c:'#059669',val:'1,984',lbl:'Delivered',trend:'96.1% rate',up:true,sub:''},
+    {icon:'fas fa-times-circle',bg:'#dc2626',c:'#dc2626',val:'82',lbl:'Cancelled/Returned',trend:'3.9% rate',up:false,sub:''},
+  ].map(kpiHTML).join('');
+  document.getElementById('orders-tbody').innerHTML=ORDERS.map(o=>`<tr><td><strong style="color:var(--accent);font-family:var(--mono);font-size:10.5px;">${o.id}</strong></td><td><div style="display:flex;align-items:center;gap:7px;"><div class="u-av" style="background:${avColor(o.cust)}">${o.cust[0]}</div><strong>${o.cust}</strong></div></td><td style="max-width:160px;">${o.prod}</td><td><span class="tag">${o.cat}</span></td><td style="color:var(--text3);font-size:11.5px;">${o.date}</td><td><strong>${o.amt}</strong></td><td style="font-size:12px;">${o.pay}</td><td><span class="tag">${o.del}</span></td><td>${sb(o.status)}</td><td><div class="act-grp"><button class="btn btn-ghost btn-xs"><i class="fas fa-eye"></i></button><button class="btn btn-warning btn-xs"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-xs"><i class="fas fa-times"></i></button></div></td></tr>`).join('');
+}
+
+function renderProductsTable(){
+  document.getElementById('prod-kpis').innerHTML=[
+    {icon:'fas fa-box-open',bg:'#1d4ed8',c:'#1d4ed8',val:'3,418',lbl:'Total Products',trend:'+24 this week',up:true,sub:''},
+    {icon:'fas fa-exclamation',bg:'#dc2626',c:'#dc2626',val:'7',lbl:'Low Stock',trend:'Reorder now',up:false,sub:''},
+    {icon:'fas fa-times-circle',bg:'#7c3aed',c:'#7c3aed',val:'2',lbl:'Out of Stock',trend:'₹ at risk',up:false,sub:''},
+    {icon:'fas fa-tags',bg:'#059669',c:'#059669',val:'9',lbl:'Categories',trend:'Active',up:true,sub:''},
+  ].map(kpiHTML).join('');
+
+  document.getElementById('cat-chips').innerHTML=CATEGORIES.map(c=>`<span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;background:var(--surface);border:1px solid var(--border);color:var(--text2);cursor:pointer;box-shadow:var(--sh);" onclick="filterByCategory('${c.name}',this)"><i class="${c.icon}" style="color:${c.c};font-size:11px;"></i>${c.name}</span>`).join('');
+
+  document.getElementById('products-tbody').innerHTML=PRODUCTS.map(p=>{
+    const sc=p.stock===0?'b-failed':p.stock<10?'b-pending':'b-success';
+    const st=p.stock===0?'Out of Stock':p.stock<10?`Low (${p.stock})`:`${p.stock} units`;
+    return `<tr><td><div class="prod-name-cell"><img class="prod-img" src="${p.img}" alt=""><strong>${p.name}</strong></div></td><td><span class="tag">${p.cat}</span></td><td style="color:var(--text3);font-size:11.5px;">${p.sub}</td><td><span class="txn-mono">${p.sku}</span></td><td><span class="badge ${sc}">${st}</span></td><td><strong>${p.price}</strong></td><td style="color:var(--text3);text-decoration:line-through;font-size:11.5px;">${p.mrp}</td><td style="font-family:var(--mono);font-size:12px;">${p.sales}</td><td><span class="stars">${stars(p.rating)}</span><span style="font-size:10.5px;color:var(--text3);margin-left:3px;">${p.rating}</span></td><td>${sb(p.status)}</td><td><div class="act-grp"><button class="btn btn-ghost btn-xs"><i class="fas fa-eye"></i></button><button class="btn btn-warning btn-xs"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-xs"><i class="fas fa-trash"></i></button></div></td></tr>`;
+  }).join('');
+}
+
+function filterByCategory(cat,el){
+  document.querySelectorAll('#cat-chips span').forEach(s=>{s.style.background='var(--surface)';s.style.borderColor='var(--border)';});
+  el.style.background='var(--accent-l)';el.style.borderColor='var(--accent)';
+}
+
+function renderCategories(){
+  document.getElementById('cat-kpis').innerHTML=[
+    {icon:'fas fa-tags',bg:'#1d4ed8',c:'#1d4ed8',val:'10',lbl:'Total Categories',trend:'9 active',up:true,sub:''},
+    {icon:'fas fa-sitemap',bg:'#7c3aed',c:'#7c3aed',val:'92',lbl:'Sub-Categories',trend:'All active',up:true,sub:''},
+    {icon:'fas fa-box',bg:'#059669',c:'#059669',val:'3,418',lbl:'Total Products',trend:'+24 this week',up:true,sub:''},
+    {icon:'fas fa-rupee-sign',bg:'#d97706',c:'#d97706',val:'₹29.3L',lbl:'Total Revenue',trend:'Across all categories',up:true,sub:''},
+  ].map(kpiHTML).join('');
+
+  document.getElementById('cat-tbody').innerHTML=CATEGORIES.map(c=>`<tr><td><div style="display:flex;align-items:center;gap:9px;"><div style="width:30px;height:30px;background:${c.c}22;border-radius:7px;display:flex;align-items:center;justify-content:center;color:${c.c};font-size:13px;"><i class="${c.icon}"></i></div><strong>${c.name}</strong></div></td><td style="font-family:var(--mono);">${c.sub}</td><td style="font-family:var(--mono);">${c.products.toLocaleString()}</td><td><strong>${c.rev}</strong></td><td>${sb(c.status)}</td><td><div class="act-grp"><button class="btn btn-ghost btn-xs"><i class="fas fa-eye"></i></button><button class="btn btn-warning btn-xs"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-xs"><i class="fas fa-trash"></i></button></div></td></tr>`).join('');
+
+  const cats=CATEGORIES.filter(c=>c.status==='active');
+  const colors=['#1d4ed8','#7c3aed','#059669','#0891b2','#db2777','#d97706','#0d9488','#ea580c','#dc2626'];
+  document.getElementById('cat-rev-legend').innerHTML=cats.slice(0,6).map((c,i)=>`<div class="dl-row"><div class="dl-dot" style="background:${colors[i]}"></div><span class="dl-name">${c.name}</span><span class="dl-pct">${c.rev}</span></div>`).join('');
+  const crc=document.getElementById('catRevDonut').getContext('2d');
+  new Chart(crc,{type:'doughnut',data:{labels:cats.map(c=>c.name),datasets:[{data:[32,37,17,11,8,6,7,3,4],backgroundColor:colors,borderColor:'#fff',borderWidth:3,hoverOffset:5}]},options:{responsive:true,cutout:'68%',plugins:{legend:{display:false}}}});
+}
+
+function renderInventory(){
+  document.getElementById('inv-kpis').innerHTML=[
+    {icon:'fas fa-boxes',bg:'#1d4ed8',c:'#1d4ed8',val:'3,418',lbl:'Total SKUs',trend:'Across 9 categories',up:true,sub:''},
+    {icon:'fas fa-exclamation-triangle',bg:'#dc2626',c:'#dc2626',val:'7',lbl:'Low Stock SKUs',trend:'Reorder immediately',up:false,sub:''},
+    {icon:'fas fa-times-circle',bg:'#7c3aed',c:'#7c3aed',val:'2',lbl:'Out of Stock',trend:'Revenue at risk',up:false,sub:''},
+    {icon:'fas fa-warehouse',bg:'#059669',c:'#059669',val:'₹84.6L',lbl:'Inventory Value',trend:'+8.4% MoM',up:true,sub:''},
+  ].map(kpiHTML).join('');
+
+  const lowStockProds=PRODUCTS.filter(p=>p.stock<10);
+  document.getElementById('inv-warnings').innerHTML=lowStockProds.map(p=>`<div class="inv-warn"><i class="fas fa-exclamation-circle"></i><strong>${p.name}</strong> — ${p.stock===0?'Out of stock. Reorder immediately.':'Only '+p.stock+' units remaining. Reorder point: 10 units.'}</div>`).join('');
+
+  const suppliers={'Clothing':'Mafatlal Textiles','Electronics':'Ingram Micro','Footwear':'Khadim India','Home & Living':'Urban Ladder Wholesale','Beauty':'Nykaa B2B','Sports':'Decathlon B2B','Watches':'Titan Dealers','Others':'General Supplier'};
+  document.getElementById('inv-tbody').innerHTML=PRODUCTS.map(p=>{
+    const sc=p.stock===0?'b-failed':p.stock<10?'b-pending':'b-success';
+    const st=p.stock===0?'Out of Stock':p.stock<10?'Low Stock':'In Stock';
+    return `<tr><td><div class="prod-name-cell"><img class="prod-img" src="${p.img}" alt=""><strong>${p.name}</strong></div></td><td><span class="tag">${p.cat}</span></td><td><span class="txn-mono">${p.sku}</span></td><td><strong style="font-family:var(--mono);">${p.stock}</strong></td><td style="font-family:var(--mono);color:var(--text3);">${Math.max(0,Math.floor(p.stock*.2))}</td><td style="font-family:var(--mono);">10</td><td style="font-size:11.5px;">${suppliers[p.cat]||'General Supplier'}</td><td style="color:var(--text3);font-size:11.5px;">May ${Math.floor(Math.random()*5+1)}, 2026</td><td><span class="badge ${sc}">${st}</span></td></tr>`;
+  }).join('');
+
+  document.getElementById('inv-timeline').innerHTML=[
+    {c:'#059669',ic:'fas fa-plus',t:'Restocked: HP Victus Ryzen 7',s:'+50 units · Supplier: Ingram Micro',time:'Today, 9:00 AM'},
+    {c:'#1d4ed8',ic:'fas fa-minus',t:"Sold: Women's Floral Kurti",s:'-18 units · Orders batch processed',time:'Today, 8:30 AM'},
+    {c:'#d97706',ic:'fas fa-exclamation',t:'Low Stock: Vitamin C Serum 30ml',s:'2 units — alert triggered',time:'Today, 8:15 AM'},
+    {c:'#dc2626',ic:'fas fa-times',t:'Out of Stock: Sony WH-1000XM5',s:'0 units — reorder auto-triggered',time:'Yesterday, 4:00 PM'},
+    {c:'#7c3aed',ic:'fas fa-undo',t:'Return: Yoga Mat — +1 unit',s:'RET-089 processed · ORD-2080',time:'Yesterday, 2:00 PM'},
+  ].map(e=>`<div class="tl-item"><div class="tl-dot" style="background:${e.c}"><i class="${e.ic}" style="font-size:11px;"></i></div><div class="tl-body"><div class="tl-title">${e.t}</div><div class="tl-sub">${e.s}</div><div class="tl-time">${e.time}</div></div></div>`).join('');
+
+  setTimeout(()=>{
+    const sc=document.getElementById('stockChart');
+    if(sc&&!sc.dataset.rendered){sc.dataset.rendered=1;new Chart(sc.getContext('2d'),{type:'bar',data:{labels:['Clothing','Electronics','Footwear','Home','Beauty','Sports','Watches'],datasets:[{label:'Units',data:[1284,306,392,462,582,346,190],backgroundColor:['#1d4ed8','#7c3aed','#059669','#0891b2','#db2777','#d97706','#0d9488'],borderRadius:4,barPercentage:.65}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8492a6',font:{size:9}},grid:{display:false}},y:{ticks:{color:'#8492a6',font:{size:9}},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true}}}});}
+  },100);
+}
+
+function renderCustomers(){
+  document.getElementById('cust-kpis').innerHTML=[
+    {icon:'fas fa-users',bg:'#1d4ed8',c:'#1d4ed8',val:'2,847',lbl:'Total Customers',trend:'+94 this week',up:true,sub:''},
+    {icon:'fas fa-user-check',bg:'#059669',c:'#059669',val:'892',lbl:'Repeat Buyers',trend:'31.3% of total',up:true,sub:''},
+    {icon:'fas fa-user-plus',bg:'#7c3aed',c:'#7c3aed',val:'184',lbl:'New This Month',trend:'+18% MoM',up:true,sub:''},
+    {icon:'fas fa-rupee-sign',bg:'#d97706',c:'#d97706',val:'₹22,840',lbl:'Avg Order Value',trend:'+₹2,100 MoM',up:true,sub:''},
+  ].map(kpiHTML).join('');
+
+  document.getElementById('cust-tbody').innerHTML=CUSTOMERS.map(c=>`<tr><td><div style="display:flex;align-items:center;gap:8px;"><div class="u-av" style="background:${avColor(c.name)}">${c.name[0]}</div><strong>${c.name}</strong></div></td><td style="color:var(--text3);font-size:11.5px;">${c.email}</td><td style="font-family:var(--mono);font-size:11px;color:var(--text3);">${c.phone}</td><td style="font-size:12px;">${c.loc}</td><td style="font-family:var(--mono);">${c.orders}</td><td><strong>${c.spent}</strong></td><td>${sb(c.seg)}</td><td style="color:var(--text3);font-size:11.5px;">${c.joined}</td><td>${sb(c.status)}</td><td><div class="act-grp"><button class="btn btn-ghost btn-xs"><i class="fas fa-eye"></i></button><button class="btn btn-warning btn-xs"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-xs"><i class="fas fa-ban"></i></button></div></td></tr>`).join('');
+
+  const segData=[{l:'VIP/Platinum',c:'#7c3aed',v:8},{l:'Gold',c:'#d97706',v:18},{l:'Regular',c:'#1d4ed8',v:48},{l:'New',c:'#059669',v:20},{l:'At Risk',c:'#ea580c',v:4},{l:'Churned',c:'#dc2626',v:2}];
+  document.getElementById('cust-legend').innerHTML=segData.map(s=>`<div class="dl-row"><div class="dl-dot" style="background:${s.c}"></div><span class="dl-name">${s.l}</span><span class="dl-pct">${s.v}%</span></div>`).join('');
+  const cd=document.getElementById('custDonut');
+  if(cd&&!cd.dataset.rendered){cd.dataset.rendered=1;new Chart(cd.getContext('2d'),{type:'doughnut',data:{labels:segData.map(s=>s.l),datasets:[{data:segData.map(s=>s.v),backgroundColor:segData.map(s=>s.c),borderColor:'#fff',borderWidth:3,hoverOffset:5}]},options:{responsive:true,cutout:'68%',plugins:{legend:{display:false}}}});}
+  const cg=document.getElementById('custGrowth');
+  if(cg&&!cg.dataset.rendered){cg.dataset.rendered=1;new Chart(cg.getContext('2d'),{type:'line',data:{labels:['Dec','Jan','Feb','Mar','Apr','May'],datasets:[{label:'New Customers',data:[184,228,196,241,218,184],borderColor:'#059669',backgroundColor:'rgba(5,150,105,0.08)',borderWidth:2,tension:.4,fill:true,pointRadius:4,pointBackgroundColor:'#059669'}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8492a6',font:{size:10}},grid:{display:false}},y:{ticks:{color:'#8492a6',font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true}}}});}
+}
+
+function renderAnalytics(){
+  document.getElementById('analytics-kpis').innerHTML=[
+    {icon:'fas fa-rupee-sign',bg:'#059669',c:'#059669',val:'₹24.8L',lbl:'Total Revenue',trend:'+22.4% YoY',up:true,sub:''},
+    {icon:'fas fa-percent',bg:'#1d4ed8',c:'#1d4ed8',val:'4.2%',lbl:'Conversion Rate',trend:'+0.6% MoM',up:true,sub:'Industry avg: 3.1%'},
+    {icon:'fas fa-shopping-cart',bg:'#d97706',c:'#d97706',val:'₹2,84,000',lbl:'Abandoned Cart Value',trend:'11.8% loss',up:false,sub:''},
+    {icon:'fas fa-redo',bg:'#7c3aed',c:'#7c3aed',val:'31.3%',lbl:'Repeat Purchase',trend:'+4.8% MoM',up:true,sub:''},
+  ].map(kpiHTML).join('');
+
+  const rt=document.getElementById('revTrend');if(rt&&!rt.dataset.rendered){rt.dataset.rendered=1;new Chart(rt.getContext('2d'),{type:'line',data:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],datasets:[{label:'Revenue (₹)',data:[84000,148000,220000,186000,94000,168000,212000,284000,242000,318000,396000,348000],borderColor:'#1d4ed8',backgroundColor:'rgba(29,78,216,0.07)',borderWidth:2,tension:.4,fill:true,pointRadius:3,pointBackgroundColor:'#1d4ed8'}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{backgroundColor:'#fff',borderColor:'#e2e6f0',borderWidth:1,titleColor:'#0d1117',bodyColor:'#3d4a5c'}},scales:{x:{ticks:{color:'#8492a6',font:{size:10}},grid:{display:false}},y:{ticks:{color:'#8492a6',font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true}}}});}
+
+  const cc=document.getElementById('channelChart');if(cc&&!cc.dataset.rendered){cc.dataset.rendered=1;new Chart(cc.getContext('2d'),{type:'bar',data:{labels:['Direct','Organic','Social','Email','Affiliate','Paid Ads','App'],datasets:[{label:'Orders',data:[684,428,348,214,128,84,218],backgroundColor:['#1d4ed8','#059669','#db2777','#d97706','#7c3aed','#0891b2','#0d9488'],borderRadius:5,barPercentage:.6}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8492a6',font:{size:10}},grid:{display:false}},y:{ticks:{color:'#8492a6',font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true}}}});}
+
+  document.getElementById('funnel-body').innerHTML=[{l:'Store Visitors',v:'84,200',pct:100,c:'#1d4ed8'},{l:'Product Views',v:'38,400',pct:46,c:'#7c3aed'},{l:'Add to Cart',v:'12,840',pct:15,c:'#d97706'},{l:'Checkout Started',v:'4,820',pct:5.7,c:'#db2777'},{l:'Order Placed',v:'3,528',pct:4.2,c:'#059669'}].map(f=>`<div style="margin-bottom:11px;"><div style="display:flex;justify-content:space-between;margin-bottom:3px;"><span style="font-size:12px;color:var(--text2);">${f.l}</span><span style="font-size:12px;font-weight:700;font-family:var(--mono);">${f.v} <span style="color:var(--text3);font-weight:400;">(${f.pct}%)</span></span></div><div class="pbar"><div class="pbar-fill" style="width:${f.pct}%;background:${f.c};"></div></div></div>`).join('');
+
+  document.getElementById('region-body').innerHTML=[{r:'Maharashtra',v:'₹7.2L',pct:80},{r:'Karnataka',v:'₹5.4L',pct:60},{r:'Delhi NCR',v:'₹4.1L',pct:46},{r:'Telangana',v:'₹2.8L',pct:31},{r:'Gujarat',v:'₹2.2L',pct:24},{r:'Others',v:'₹3.1L',pct:35}].map(r=>`<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;margin-bottom:3px;"><span style="font-size:12px;color:var(--text2);">${r.r}</span><span style="font-size:12px;font-weight:700;font-family:var(--mono);">${r.v}</span></div><div class="pbar"><div class="pbar-fill" style="width:${r.pct}%;background:#0891b2;"></div></div></div>`).join('');
+
+  const pc=document.getElementById('peakChart');if(pc&&!pc.dataset.rendered){pc.dataset.rendered=1;new Chart(pc.getContext('2d'),{type:'bar',data:{labels:['6AM','8AM','10AM','12PM','2PM','4PM','6PM','8PM','10PM'],datasets:[{label:'Orders',data:[18,72,142,218,164,196,284,248,84],backgroundColor:'rgba(29,78,216,0.72)',borderRadius:4,barPercentage:.7}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8492a6',font:{size:9}},grid:{display:false}},y:{ticks:{color:'#8492a6',font:{size:9}},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true}}}});}
+}
+
+function renderPayments(){
+  document.getElementById('pay-kpis').innerHTML=[
+    {icon:'fas fa-rupee-sign',bg:'#059669',c:'#059669',val:'₹24.8L',lbl:'Total Collected',trend:'+22.4%',up:true,sub:''},
+    {icon:'fas fa-clock',bg:'#d97706',c:'#d97706',val:'₹84,750',lbl:'Pending Settlement',trend:'28 txns',up:false,sub:''},
+    {icon:'fas fa-undo',bg:'#dc2626',c:'#dc2626',val:'₹28,400',lbl:'Refunds (MTD)',trend:'11 orders',up:false,sub:''},
+    {icon:'fas fa-check-circle',bg:'#1d4ed8',c:'#1d4ed8',val:'99.1%',lbl:'Success Rate',trend:'+0.2% MoM',up:true,sub:''},
+  ].map(kpiHTML).join('');
+
+  document.getElementById('pay-tbody').innerHTML=[
+    {id:'PAY-14821',ord:'ORD-2104',cust:'Rahul Sharma',amt:'₹52,000',m:'UPI',gw:'Razorpay',st:'pending',date:'05-05-2026'},
+    {id:'PAY-14820',ord:'ORD-2102',cust:'Arjun Patel',amt:'₹9,495',m:'Credit Card',gw:'Razorpay',st:'processing',date:'04-05-2026'},
+    {id:'PAY-14819',ord:'ORD-2101',cust:'Sneha Reddy',amt:'₹699',m:'UPI',gw:'Razorpay',st:'delivered',date:'04-05-2026'},
+    {id:'PAY-14818',ord:'ORD-2099',cust:'Kavya Iyer',amt:'₹3,499',m:'Net Banking',gw:'PayU',st:'delivered',date:'03-05-2026'},
+    {id:'PAY-14817',ord:'ORD-2098',cust:'Rohan Gupta',amt:'₹8,995',m:'COD',gw:'Manual',st:'shipped',date:'03-05-2026'},
+    {id:'PAY-14816',ord:'ORD-2094',cust:'Aditya Kumar',amt:'₹2,499',m:'Net Banking',gw:'PayU',st:'cancelled',date:'01-05-2026'},
+  ].map(t=>`<tr><td><span class="txn-mono">${t.id}</span></td><td style="color:var(--accent);font-family:var(--mono);font-size:10.5px;">${t.ord}</td><td><strong>${t.cust}</strong></td><td><strong>${t.amt}</strong></td><td style="font-size:12px;">${t.m}</td><td><span class="tag">${t.gw}</span></td><td>${sb(t.st)}</td><td style="color:var(--text3);font-size:11.5px;">${t.date}</td></tr>`).join('');
+
+  const pm=[{l:'UPI',c:'#059669',v:52},{l:'Credit Card',c:'#1d4ed8',v:24},{l:'Net Banking',c:'#7c3aed',v:12},{l:'COD',c:'#d97706',v:7},{l:'EMI',c:'#0891b2',v:3},{l:'BNPL',c:'#db2777',v:2}];
+  document.getElementById('pay-legend').innerHTML=pm.map(p=>`<div class="dl-row"><div class="dl-dot" style="background:${p.c}"></div><span class="dl-name">${p.l}</span><span class="dl-pct">${p.v}%</span></div>`).join('');
+  const pd=document.getElementById('payDonut');if(pd&&!pd.dataset.rendered){pd.dataset.rendered=1;new Chart(pd.getContext('2d'),{type:'doughnut',data:{labels:pm.map(p=>p.l),datasets:[{data:pm.map(p=>p.v),backgroundColor:pm.map(p=>p.c),borderColor:'#fff',borderWidth:3,hoverOffset:5}]},options:{responsive:true,cutout:'68%',plugins:{legend:{display:false}}}});}
+
+  document.getElementById('settlement-body').innerHTML=[{l:'This Week Settlement',v:'₹2,84,500',sub:'Processed 30 Apr'},{l:'Last Month Total',v:'₹18,42,300',sub:'Fully settled'},{l:'Pending Clearance',v:'₹84,750',sub:'ETA: 2 business days'},{l:'Gateway Fees (MTD)',v:'₹48,240',sub:'Razorpay + PayU combined'}].map(s=>`<div class="stat-row"><div class="stat-label">${s.l}<div style="font-size:10.5px;color:var(--text3);margin-top:1px;">${s.sub}</div></div><div class="stat-value">${s.v}</div></div>`).join('');
+}
+
+function renderShipping(){
+  document.getElementById('ship-kpis').innerHTML=[
+    {icon:'fas fa-truck',bg:'#1d4ed8',c:'#1d4ed8',val:'128',lbl:'Active Shipments',trend:'In transit',up:true,sub:''},
+    {icon:'fas fa-check',bg:'#059669',c:'#059669',val:'1,984',lbl:'Delivered (MTD)',trend:'96.1% rate',up:true,sub:''},
+    {icon:'fas fa-clock',bg:'#d97706',c:'#d97706',val:'2.1 days',lbl:'Avg Delivery Time',trend:'-0.4d MoM',up:true,sub:''},
+    {icon:'fas fa-times',bg:'#dc2626',c:'#dc2626',val:'24',lbl:'Failed Deliveries',trend:'1.2% rate',up:false,sub:''},
+  ].map(kpiHTML).join('');
+
+  document.getElementById('ship-tbody').innerHTML=[
+    {id:'DLV-2841021',ord:'ORD-2102',cust:'Arjun Patel',cat:'Footwear',cur:'Delhivery',from:'Mumbai Hub',to:'Ahmedabad',eta:'May 7',st:'shipped'},
+    {id:'BLU-1920284',ord:'ORD-2100',cust:'Vikram Joshi',cat:'Sports',cur:'Blue Dart',from:'Delhi Hub',to:'Pune',eta:'May 8',st:'processing'},
+    {id:'EKA-3824100',ord:'ORD-2098',cust:'Rohan Gupta',cat:'Watches',cur:'Ekart',from:'Bangalore Hub',to:'Kolkata',eta:'May 9',st:'shipped'},
+    {id:'DLV-2840998',ord:'ORD-2097',cust:'Anjali Singh',cat:'Electronics',cur:'Delhivery',from:'Mumbai Hub',to:'Delhi',eta:'May 8',st:'processing'},
+    {id:'XPR-4812002',ord:'ORD-2093',cust:'Neha Bhatt',cat:'Electronics',cur:'Xpressbees',from:'Hyderabad Hub',to:'Jaipur',eta:'May 8',st:'shipped'},
+  ].map(s=>`<tr><td><span class="txn-mono">${s.id}</span></td><td style="color:var(--accent);font-family:var(--mono);font-size:10.5px;">${s.ord}</td><td><strong>${s.cust}</strong></td><td><span class="tag">${s.cat}</span></td><td><span class="tag">${s.cur}</span></td><td style="color:var(--text3);font-size:11.5px;">${s.from}</td><td style="font-size:12px;">${s.to}</td><td style="font-family:var(--mono);color:var(--text3);font-size:11.5px;">${s.eta}</td><td>${sb(s.st)}</td></tr>`).join('');
+
+  document.getElementById('courier-perf-body').innerHTML=[{n:'Blue Dart',r:'98.4%',t:'1.7d',c:'#059669'},{n:'Delhivery',r:'96.8%',t:'2.1d',c:'#1d4ed8'},{n:'Xpressbees',r:'95.2%',t:'2.4d',c:'#7c3aed'},{n:'Ekart',r:'93.6%',t:'3.1d',c:'#d97706'},{n:'DTDC',r:'91.8%',t:'3.4d',c:'#0891b2'}].map(c=>`<div class="stat-row"><div class="stat-label">${c.n}<div style="font-size:10.5px;color:var(--text3);">Avg delivery: ${c.t}</div></div><div style="text-align:right;"><div class="stat-value" style="color:${c.c}">${c.r}</div></div></div>`).join('');
+
+  document.getElementById('zone-body').innerHTML=[{z:'Metro (Zone A)',v:984,pct:80},{z:'Tier 2 (Zone B)',v:584,pct:47},{z:'Tier 3 (Zone C)',v:328,pct:27},{z:'Remote (Zone D)',v:108,pct:9}].map(z=>`<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;margin-bottom:3px;"><span style="font-size:12px;color:var(--text2);">${z.z}</span><span style="font-size:12px;font-weight:700;font-family:var(--mono);">${z.v} orders</span></div><div class="pbar"><div class="pbar-fill" style="width:${z.pct}%;background:#0891b2;"></div></div></div>`).join('');
+}
+
+function renderReturns(){
+  document.getElementById('ret-kpis').innerHTML=[
+    {icon:'fas fa-undo',bg:'#dc2626',c:'#dc2626',val:'8',lbl:'Pending Returns',trend:'Review now',up:false,sub:''},
+    {icon:'fas fa-rupee-sign',bg:'#d97706',c:'#d97706',val:'₹28,400',lbl:'Refund Value',trend:'This month',up:false,sub:''},
+    {icon:'fas fa-percentage',bg:'#7c3aed',c:'#7c3aed',val:'1.4%',lbl:'Return Rate',trend:'Industry: 4.8%',up:true,sub:''},
+    {icon:'fas fa-clock',bg:'#1d4ed8',c:'#1d4ed8',val:'2.8 days',lbl:'Avg Resolution',trend:'-0.4d MoM',up:true,sub:''},
+  ].map(kpiHTML).join('');
+
+  document.getElementById('ret-tbody').innerHTML=[
+    {id:'RET-0124',ord:'ORD-2103',cust:'Priya Nair',prod:"Women's Floral Kurti",cat:'Clothing',reason:'Wrong size',date:'05-05-2026',amt:'₹799',st:'pending'},
+    {id:'RET-0123',ord:'ORD-2101',cust:'Sneha Reddy',prod:'Vitamin C Serum',cat:'Beauty',reason:'Not as described',date:'04-05-2026',amt:'₹699',st:'processing'},
+    {id:'RET-0122',ord:'ORD-2097',cust:'Anjali Singh',prod:'Sony WH-1000XM5',cat:'Electronics',reason:'Defective product',date:'03-05-2026',amt:'₹28,990',st:'approved'},
+    {id:'RET-0121',ord:'ORD-2091',cust:'Meera Thomas',prod:"Women's Floral Kurti",cat:'Clothing',reason:'Changed mind',date:'02-05-2026',amt:'₹799',st:'resolved'},
+    {id:'RET-0120',ord:'ORD-2085',cust:'Dev Mehta',prod:'Yoga Mat Premium',cat:'Sports',reason:'Damaged in shipping',date:'30-04-2026',amt:'₹1,899',st:'approved'},
+  ].map(r=>`<tr><td style="color:var(--red);font-family:var(--mono);font-size:10.5px;">${r.id}</td><td style="color:var(--accent);font-family:var(--mono);font-size:10.5px;">${r.ord}</td><td><strong>${r.cust}</strong></td><td>${r.prod}</td><td><span class="tag">${r.cat}</span></td><td><span class="tag">${r.reason}</span></td><td style="color:var(--text3);font-size:11.5px;">${r.date}</td><td><strong style="color:var(--red);">${r.amt}</strong></td><td>${sb(r.st)}</td><td><div class="act-grp"><button class="btn btn-success btn-xs"><i class="fas fa-check"></i></button><button class="btn btn-danger btn-xs"><i class="fas fa-times"></i></button></div></td></tr>`).join('');
+}
+
+function renderCoupons(){
+  document.getElementById('coup-kpis').innerHTML=[
+    {icon:'fas fa-ticket-alt',bg:'#1d4ed8',c:'#1d4ed8',val:'18',lbl:'Active Coupons',trend:'4 expiring soon',up:false,sub:''},
+    {icon:'fas fa-rupee-sign',bg:'#059669',c:'#059669',val:'₹18,420',lbl:'Discount Given',trend:'This month',up:false,sub:''},
+    {icon:'fas fa-users',bg:'#7c3aed',c:'#7c3aed',val:'842',lbl:'Coupons Used',trend:'38.2% usage rate',up:true,sub:''},
+    {icon:'fas fa-percentage',bg:'#d97706',c:'#d97706',val:'21.4%',lbl:'Avg Discount',trend:'',up:true,sub:''},
+  ].map(kpiHTML).join('');
+
+  const coupons=[
+    {code:'SUMMER25',type:'25% OFF',desc:'Summer sale — all clothing & footwear',min:'₹1,499',used:284,total:500,exp:'31 May 2026',st:'active',cats:'Clothing, Footwear'},
+    {code:'WELCOME10',type:'10% OFF',desc:'Welcome discount for new customers only',min:'₹500',used:428,total:1000,exp:'31 Dec 2026',st:'active',cats:'All Categories'},
+    {code:'FLAT500',type:'₹500 OFF',desc:'Flat ₹500 on orders above ₹5,000',min:'₹5,000',used:142,total:300,exp:'20 May 2026',st:'active',cats:'Electronics, Watches'},
+    {code:'BEAUTY20',type:'20% OFF',desc:'Beauty & grooming special',min:'₹999',used:318,total:400,exp:'15 May 2026',st:'active',cats:'Beauty & Grooming'},
+    {code:'FREESHIP',type:'Free Shipping',desc:'Free shipping on all orders above ₹499',min:'₹499',used:1284,total:5000,exp:'30 Jun 2026',st:'active',cats:'All Categories'},
+    {code:'FLASH40',type:'40% OFF',desc:'Flash sale — limited stock electronics',min:'₹9,999',used:200,total:200,exp:'01 May 2026',st:'inactive',cats:'Electronics'},
+  ];
+  document.getElementById('coupon-list').innerHTML=coupons.map(c=>`<div class="coupon-card"><div class="coup-code">${c.code}</div><div class="coup-info"><div class="coup-title">${c.type} · ${c.desc}</div><div class="coup-meta">Categories: ${c.cats} &nbsp;·&nbsp; Min order: ${c.min} &nbsp;·&nbsp; Used: ${c.used}/${c.total} &nbsp;·&nbsp; Expires: ${c.exp}</div><div style="margin-top:5px;"><div class="pbar" style="max-width:220px;"><div class="pbar-fill" style="width:${Math.min(100,c.used/c.total*100)}%;background:${c.used>=c.total?'var(--red)':'var(--accent)'};"></div></div></div></div><div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;">${sb(c.st)}<button class="btn btn-ghost btn-xs"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-xs"><i class="fas fa-trash"></i></button></div></div>`).join('');
+}
+
+function renderReviews(){
+  document.getElementById('rev-kpis').innerHTML=[
+    {icon:'fas fa-star',bg:'#d97706',c:'#d97706',val:'4.7',lbl:'Avg Rating',trend:'+0.1 MoM',up:true,sub:''},
+    {icon:'fas fa-comment',bg:'#1d4ed8',c:'#1d4ed8',val:'1,284',lbl:'Total Reviews',trend:'+48 this week',up:true,sub:''},
+    {icon:'fas fa-clock',bg:'#7c3aed',c:'#7c3aed',val:'12',lbl:'Pending Moderation',trend:'Moderate now',up:false,sub:''},
+    {icon:'fas fa-thumbs-up',bg:'#059669',c:'#059669',val:'96.2%',lbl:'Positive Rate',trend:'+0.8% MoM',up:true,sub:''},
+  ].map(kpiHTML).join('');
+
+  const reviews=[
+    {user:'Arjun Patel',av:'AP',avc:'#059669',prod:'Nike Air Max 270',cat:'Footwear',rating:5,text:'Absolutely worth every rupee! The cushioning is excellent and they look premium. Sized perfectly — great for both daily walks and light runs.',date:'04 May 2026',st:'approved'},
+    {user:'Sneha Reddy',av:'SR',avc:'#db2777',prod:'Vitamin C Serum 30ml',cat:'Beauty',rating:5,text:'My skin glowed within 2 weeks of use. Lightweight formula, no stickiness. The 30ml lasts about 2 months which is great value at this price.',date:'03 May 2026',st:'approved'},
+    {user:'Vikram Joshi',av:'VJ',avc:'#7c3aed',prod:'Yoga Mat Premium',cat:'Sports',rating:4,text:'Very good mat for yoga and stretching. Slightly slippery when wet but otherwise excellent grip. The thickness (6mm) is just right.',date:'02 May 2026',st:'pending'},
+    {user:'Meera Thomas',av:'MT',avc:'#0891b2',prod:"Women's Floral Kurti",cat:'Clothing',rating:3,text:'Fabric quality is decent but the colors look slightly different from the photos online. Sizing also runs a bit large. Would suggest ordering one size down.',date:'01 May 2026',st:'pending'},
+  ];
+  document.getElementById('review-list').innerHTML=reviews.map(r=>`<div class="review-card"><div class="rev-top"><div class="rev-user"><div class="u-av u-av-lg" style="background:${r.avc}">${r.av}</div><div><div class="rev-name">${r.user} <span style="font-size:10.5px;background:var(--surface3);padding:1px 6px;border-radius:10px;color:var(--text3);">${r.cat}</span></div><div class="rev-prod">${r.prod}</div></div></div><div style="text-align:right;">${sb(r.st)}</div></div><div style="color:#f59e0b;letter-spacing:2px;margin-bottom:5px;">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div><div class="rev-body">${r.text}</div><div class="rev-meta"><span style="font-size:10.5px;color:var(--text3);">${r.date}</span><div class="act-grp" style="margin-left:auto;"><button class="btn btn-success btn-xs"><i class="fas fa-check"></i>Approve</button><button class="btn btn-danger btn-xs"><i class="fas fa-times"></i>Reject</button><button class="btn btn-ghost btn-xs"><i class="fas fa-reply"></i>Reply</button></div></div></div>`).join('');
+}
+
+function renderSupport(){
+  document.getElementById('sup-kpis').innerHTML=[
+    {icon:'fas fa-ticket-alt',bg:'#dc2626',c:'#dc2626',val:'7',lbl:'Open Tickets',trend:'2 high priority',up:false,sub:''},
+    {icon:'fas fa-clock',bg:'#d97706',c:'#d97706',val:'3.8 hrs',lbl:'Avg First Response',trend:'-1.2hr MoM',up:true,sub:''},
+    {icon:'fas fa-check-circle',bg:'#059669',c:'#059669',val:'428',lbl:'Resolved (MTD)',trend:'98.2% rate',up:true,sub:''},
+    {icon:'fas fa-star',bg:'#1d4ed8',c:'#1d4ed8',val:'4.6/5',lbl:'CSAT Score',trend:'+0.2 MoM',up:true,sub:''},
+  ].map(kpiHTML).join('');
+
+  const tickets=[
+    {id:'TKT-812',title:'Payment deducted — order not confirmed',user:'Kavya Iyer',sub:'Razorpay gateway issue · ORD-2104',time:'10 min ago',pri:'high',st:'open'},
+    {id:'TKT-811',title:'Wrong colour variant received',user:'Dev Mehta',sub:'Adidas Ultraboost — ordered black, got white',time:'48 min ago',pri:'high',st:'open'},
+    {id:'TKT-810',title:'Refund not credited after 10 days',user:'Priya Nair',sub:'RET-0124 approved 25 Apr — no refund yet',time:'2 hr ago',pri:'med',st:'in progress'},
+    {id:'TKT-809',title:'Want to change delivery address',user:'Rohan Gupta',sub:'ORD-2098 — before dispatch',time:'3 hr ago',pri:'low',st:'in progress'},
+    {id:'TKT-808',title:'Product warranty claim — screen flickering',user:'Rahul Sharma',sub:'HP Victus Ryzen 7 — 2 month old unit',time:'5 hr ago',pri:'med',st:'open'},
+    {id:'TKT-807',title:'Coupon SUMMER25 not applying at checkout',user:'Anjali Singh',sub:'Applied on ₹2,499 clothing order',time:'6 hr ago',pri:'low',st:'resolved'},
+    {id:'TKT-806',title:'GST invoice name mismatch',user:'Sanjay Verma',sub:'Company name shows wrong entity on invoice',time:'8 hr ago',pri:'low',st:'resolved'},
+  ];
+  document.getElementById('ticket-list').innerHTML=tickets.map(t=>`<div class="ticket-card"><div class="ticket-icon" style="background:${t.pri==='high'?'var(--red-l)':t.pri==='med'?'var(--yellow-l)':'var(--green-l)'};color:${t.pri==='high'?'var(--red)':t.pri==='med'?'var(--yellow)':'var(--green)'}"><i class="fas fa-headset"></i></div><div style="flex:1;min-width:0;"><div class="ticket-id">${t.id}</div><div class="ticket-title">${t.title}</div><div class="ticket-sub">${t.user} · ${t.sub}</div></div><div class="ticket-meta"><div class="ticket-time">${t.time}</div><div class="ticket-pri ${t.pri==='high'?'pri-high':t.pri==='med'?'pri-med':'pri-low'}">${t.pri.toUpperCase()}</div>${sb(t.st)}</div></div>`).join('');
+
+  const tc=document.getElementById('ticketChart');if(tc&&!tc.dataset.rendered){tc.dataset.rendered=1;new Chart(tc.getContext('2d'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Open',data:[14,18,12,16,22,8,6],backgroundColor:'#dc2626',borderRadius:4,barPercentage:.6},{label:'Resolved',data:[12,16,14,18,20,9,7],backgroundColor:'#059669',borderRadius:4,barPercentage:.6}]},options:{responsive:true,plugins:{legend:{labels:{color:'#3d4a5c',font:{size:10},padding:10}}},scales:{x:{ticks:{color:'#8492a6',font:{size:9}},grid:{display:false}},y:{ticks:{color:'#8492a6',font:{size:9}},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true}}}});}
+  document.getElementById('sup-stats').innerHTML=[{l:'Avg first response time',v:'3.8 hrs'},{l:'Avg resolution time',v:'16.4 hrs'},{l:'Tickets per day (avg)',v:'22.4'},{l:'CSAT Score',v:'4.6 / 5.0'},{l:'Escalation rate',v:'4.2%'}].map(s=>`<div class="stat-row"><span class="stat-label">${s.l}</span><span class="stat-value">${s.v}</span></div>`).join('');
+}
+
+function renderEmployees(){
+  document.getElementById('emp-kpis').innerHTML=[
+    {icon:'fas fa-user-tie',bg:'#1d4ed8',c:'#1d4ed8',val:'38',lbl:'Total Employees',trend:'+2 this month',up:true,sub:''},
+    {icon:'fas fa-check-circle',bg:'#059669',c:'#059669',val:'34',lbl:'Active',trend:'89.5% of total',up:true,sub:''},
+    {icon:'fas fa-umbrella-beach',bg:'#0891b2',c:'#0891b2',val:'2',lbl:'On Leave',trend:'Priya Mehta, Deepa Rao',up:false,sub:'Wait — wrong Priya! Deepa Rao'},
+    {icon:'fas fa-building',bg:'#7c3aed',c:'#7c3aed',val:'8',lbl:'Departments',trend:'All operational',up:true,sub:''},
+  ].map(kpiHTML).join('');
+
+  // Fix emp-kpi sub text
+  document.getElementById('emp-kpis').innerHTML=[
+    {icon:'fas fa-user-tie',bg:'#1d4ed8',c:'#1d4ed8',val:'38',lbl:'Total Employees',trend:'+2 this month',up:true,sub:''},
+    {icon:'fas fa-check-circle',bg:'#059669',c:'#059669',val:'34',lbl:'Active',trend:'89.5% of total',up:true,sub:''},
+    {icon:'fas fa-umbrella-beach',bg:'#0891b2',c:'#0891b2',val:'2',lbl:'On Leave',trend:'Deepa Rao, Pooja Gupta',up:false,sub:''},
+    {icon:'fas fa-building',bg:'#7c3aed',c:'#7c3aed',val:'8',lbl:'Departments',trend:'All operational',up:true,sub:''},
+  ].map(kpiHTML).join('');
+
+  const stColor={active:'#059669','on leave':'#0891b2',suspended:'#d97706',terminated:'#dc2626'};
+  document.getElementById('emp-tbody').innerHTML=EMPLOYEES.map(e=>`<tr><td><div style="display:flex;align-items:center;gap:8px;"><div class="u-av" style="background:${avColor(e.name)}">${e.name[0]}</div><strong>${e.name}</strong></div></td><td><span class="txn-mono">${e.id}</span></td><td><span class="tag">${e.dept}</span></td><td style="font-size:12px;">${e.role}</td><td style="color:var(--text3);font-size:11.5px;">${e.email}</td><td style="font-family:var(--mono);font-size:11px;color:var(--text3);">${e.phone}</td><td style="color:var(--text3);font-size:11.5px;">${e.join}</td><td style="color:var(--text3);font-size:11.5px;">${e.lastLogin}</td><td>${sb(e.status)}</td><td><div class="act-grp"><button class="btn btn-ghost btn-xs"><i class="fas fa-eye"></i></button><button class="btn btn-warning btn-xs"><i class="fas fa-edit"></i></button><button class="btn btn-purple btn-xs"><i class="fas fa-shield-alt"></i></button><button class="btn btn-danger btn-xs"><i class="fas fa-ban"></i></button></div></td></tr>`).join('');
+
+  const depts=[{l:'Technology',c:'#1d4ed8',v:22},{l:'Support',c:'#059669',v:24},{l:'Operations',c:'#7c3aed',v:13},{l:'Sales',c:'#d97706',v:13},{l:'Warehouse',c:'#0891b2',v:16},{l:'Finance',c:'#db2777',v:5},{l:'Marketing',c:'#0d9488',v:5},{l:'HR',c:'#ea580c',v:2}];
+  document.getElementById('emp-dept-legend').innerHTML=depts.slice(0,6).map(d=>`<div class="dl-row"><div class="dl-dot" style="background:${d.c}"></div><span class="dl-name">${d.l}</span><span class="dl-pct">${d.v}%</span></div>`).join('');
+  const ed=document.getElementById('empDeptDonut');if(ed&&!ed.dataset.rendered){ed.dataset.rendered=1;new Chart(ed.getContext('2d'),{type:'doughnut',data:{labels:depts.map(d=>d.l),datasets:[{data:depts.map(d=>d.v),backgroundColor:depts.map(d=>d.c),borderColor:'#fff',borderWidth:3,hoverOffset:5}]},options:{responsive:true,cutout:'68%',plugins:{legend:{display:false}}}});}
+
+  document.getElementById('emp-timeline').innerHTML=[
+    {c:'#059669',ic:'fas fa-user-plus',t:'New Employee Added',s:'Amit Kumar Sharma — EMP-00039 · Support Agent',time:'Today, 10:21 AM'},
+    {c:'#0891b2',ic:'fas fa-umbrella-beach',t:'Leave Approved: Pooja Gupta',s:'Annual leave 05-12 May 2026',time:'Today, 9:40 AM'},
+    {c:'#d97706',ic:'fas fa-shield-alt',t:'Role Updated: Meera Pillai',s:'Support Agent — permissions modified',time:'Yesterday, 4:30 PM'},
+    {c:'#dc2626',ic:'fas fa-ban',t:'Account Suspended: Ravi Dubey',s:'Unauthorised login attempt detected',time:'Today, 9:58 AM'},
+    {c:'#7c3aed',ic:'fas fa-edit',t:'Profile Updated: Arjun Nair',s:'Designation changed to Senior Sales Manager',time:'Yesterday, 2:00 PM'},
+  ].map(e=>`<div class="tl-item"><div class="tl-dot" style="background:${e.c}"><i class="${e.ic}" style="font-size:11px;"></i></div><div class="tl-body"><div class="tl-title">${e.t}</div><div class="tl-sub">${e.s}</div><div class="tl-time">${e.time}</div></div></div>`).join('');
+}
+
+function renderRBAC(){
+  document.getElementById('rbac-kpis').innerHTML=[
+    {icon:'fas fa-user-shield',bg:'#1d4ed8',c:'#1d4ed8',val:'10',lbl:'Total Roles',trend:'9 active',up:true,sub:''},
+    {icon:'fas fa-lock',bg:'#7c3aed',c:'#7c3aed',val:'48',lbl:'Max Permissions',trend:'Super Admin',up:true,sub:''},
+    {icon:'fas fa-users-cog',bg:'#059669',c:'#059669',val:'38',lbl:'Employees Assigned',trend:'All roles covered',up:true,sub:''},
+    {icon:'fas fa-shield-alt',bg:'#d97706',c:'#d97706',val:'2',lbl:'Recent Changes',trend:'Last 24 hours',up:false,sub:''},
+  ].map(kpiHTML).join('');
+
+  document.getElementById('role-tbody').innerHTML=ROLES.map(r=>`<tr><td><strong>${r.name}</strong></td><td style="font-family:var(--mono);">${r.emp}</td><td style="font-family:var(--mono);">${r.perms}</td><td style="font-size:12px;">${r.by}</td><td style="color:var(--text3);font-size:11.5px;">${r.created}</td><td style="color:var(--text3);font-size:11.5px;">${r.modified}</td><td>${sb(r.status)}</td><td><div class="act-grp">${r.name==='Super Admin'?'<span style="font-size:11px;color:var(--text3);">Protected</span>':`<button class="btn btn-ghost btn-xs"><i class="fas fa-eye"></i></button><button class="btn btn-warning btn-xs"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-xs"><i class="fas fa-trash"></i></button>`}</div></td></tr>`).join('');
+
+  renderRBACMatrix('Super Admin');
+}
+
+function renderRBACMatrix(roleKey){
+  const perms=RBAC_PERMS.perms[roleKey]||RBAC_PERMS.perms['Support Agent'];
+  const mods=RBAC_PERMS.modules;
+  const permLabels=['None','Read Only','Read + Write','Full Access'];
+  const permClass=['perm-no','perm-partial','perm-partial','perm-yes'];
+  const permIcon=['✕','R','RW','✓'];
+
+  let html=`<table class="rbac-table"><thead><tr><th style="min-width:180px;">Module</th><th>No Access</th><th>Read Only</th><th>Read + Write</th><th>Full Access</th><th>Current</th></tr></thead><tbody>`;
+  mods.forEach((mod,i)=>{
+    const cur=perms[i];
+    html+=`<tr><td>${mod}</td>`;
+    [0,1,2,3].forEach(lvl=>{
+      html+=`<td><input type="radio" name="perm_${i}" value="${lvl}" ${cur===lvl?'checked':''} ${roleKey==='Super Admin'?'disabled':''}></td>`;
+    });
+    html+=`<td><span class="perm-check ${cur===0?'perm-no':cur===3?'perm-yes':'perm-partial'}">${permIcon[cur]}</span> <span style="font-size:11px;color:var(--text3);">${permLabels[cur]}</span></td></tr>`;
+  });
+  html+=`</tbody></table>`;
+  document.getElementById('rbac-matrix').innerHTML=html;
+}
+
+function renderAuditLogs(){
+  document.getElementById('audit-kpis').innerHTML=[
+    {icon:'fas fa-clipboard-list',bg:'#1d4ed8',c:'#1d4ed8',val:'14,280',lbl:'Total Log Entries',trend:'All time',up:true,sub:''},
+    {icon:'fas fa-calendar-day',bg:'#059669',c:'#059669',val:'248',lbl:'Actions Today',trend:'Across 8 actors',up:true,sub:''},
+    {icon:'fas fa-exclamation-triangle',bg:'#dc2626',c:'#dc2626',val:'3',lbl:'Critical Events',trend:'24 hours',up:false,sub:''},
+    {icon:'fas fa-user-slash',bg:'#d97706',c:'#d97706',val:'1',lbl:'Suspicious Activity',trend:'Ravi Dubey',up:false,sub:'Account suspended'},
+  ].map(kpiHTML).join('');
+
+  const sevColor={info:'var(--accent-l)',warning:'var(--yellow-l)',critical:'var(--red-l)'};
+  const sevTxt={info:'var(--accent)',warning:'var(--yellow)',critical:'var(--red)'};
+  document.getElementById('audit-tbody').innerHTML=AUDIT_LOGS.map(l=>`<tr><td style="font-family:var(--mono);font-size:10.5px;color:var(--text3);white-space:nowrap;">${l.ts}</td><td><div style="display:flex;align-items:center;gap:6px;"><div class="u-av" style="background:${l.actor==='System'?'#64748b':avColor(l.actor)};font-size:9px;">${l.actor==='System'?'SYS':l.actor[0]}</div><strong style="font-size:12px;">${l.actor}</strong></div></td><td style="font-size:11.5px;color:var(--text3);">${l.role}</td><td><span class="tag">${l.module}</span></td><td><span style="font-family:var(--mono);font-size:10.5px;font-weight:700;color:${l.action==='DELETE'||l.action==='CANCEL'?'var(--red)':l.action==='CREATE'||l.action==='APPROVE'||l.action==='RESOLVE'?'var(--green)':l.action==='UPDATE'||l.action==='EXPORT'?'var(--yellow)':'var(--text2)'};">${l.action}</span></td><td style="font-size:11.5px;max-width:220px;color:var(--text2);">${l.target}</td><td><span class="txn-mono">${l.ip}</span></td><td>${sb(l.sev)}</td></tr>`).join('');
+
+  const amc=document.getElementById('auditModuleChart');if(amc&&!amc.dataset.rendered){amc.dataset.rendered=1;new Chart(amc.getContext('2d'),{type:'bar',data:{labels:['Orders','Products','Settings','Payments','Employees','RBAC','Inventory','Support'],datasets:[{label:'Actions',data:[84,62,28,44,22,8,48,38],backgroundColor:['#1d4ed8','#7c3aed','#d97706','#059669','#0891b2','#dc2626','#0d9488','#db2777'],borderRadius:4,barPercentage:.65}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8492a6',font:{size:9}},grid:{display:false}},y:{ticks:{color:'#8492a6',font:{size:9}},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true}}}});}
+
+  document.getElementById('audit-actors').innerHTML=[
+    {name:'Priya Mehta',role:'Ops Manager',count:48,c:'#059669'},
+    {name:'Anjali Verma',role:'Finance Analyst',count:36,c:'#7c3aed'},
+    {name:'Arjun Nair',role:'Sales Manager',count:28,c:'#d97706'},
+    {name:'BOS Admin',role:'Super Admin',count:22,c:'#1d4ed8'},
+    {name:'System',role:'Automated',count:18,c:'#8492a6'},
+  ].map(a=>`<div class="stat-row"><div style="display:flex;align-items:center;gap:8px;"><div class="u-av" style="background:${a.c};font-size:9px;">${a.name==='System'?'SYS':a.name[0]}</div><div class="stat-label">${a.name}<div style="font-size:10.5px;color:var(--text3);">${a.role}</div></div></div><div style="text-align:right;"><div class="stat-value">${a.count}</div><div style="font-size:10px;color:var(--text3);">actions</div></div></div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// DASHBOARD CHARTS
+// ═══════════════════════════════════════════════════════
+let mainChartInst;
+let currentChartType='bar';
+
+function renderDashCharts(){
+  const ctx=document.getElementById('mainChart').getContext('2d');
+  if(mainChartInst)mainChartInst.destroy();
+  const type=currentChartType;
+  mainChartInst=new Chart(ctx,{type,data:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],datasets:[{label:'Orders',data:[68,142,218,184,94,168,212,284,242,318,396,348],backgroundColor:type==='bar'?'rgba(29,78,216,0.72)':'rgba(29,78,216,0.07)',borderColor:'#1d4ed8',borderWidth:type==='bar'?0:2,borderRadius:type==='bar'?5:0,tension:.4,fill:type==='line',pointRadius:type==='line'?3:0,pointBackgroundColor:'#1d4ed8'},{label:'Revenue (₹ Ten-Thousands)',data:[8,15,22,19,9,17,21,28,24,32,40,35],backgroundColor:type==='bar'?'rgba(5,150,105,0.65)':'rgba(5,150,105,0.07)',borderColor:'#059669',borderWidth:type==='bar'?0:2,borderRadius:type==='bar'?5:0,tension:.4,fill:type==='line',pointRadius:type==='line'?3:0,pointBackgroundColor:'#059669'}]},options:{responsive:true,interaction:{mode:'index',intersect:false},plugins:{legend:{labels:{color:'#3d4a5c',font:{size:10.5},padding:12}},tooltip:{backgroundColor:'#fff',borderColor:'#e2e6f0',borderWidth:1,titleColor:'#0d1117',bodyColor:'#3d4a5c',padding:10}},scales:{x:{ticks:{color:'#8492a6',font:{size:10}},grid:{display:false}},y:{ticks:{color:'#8492a6',font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'},beginAtZero:true}}}});
+
+  const cats=[{l:'Electronics',c:'#7c3aed',v:37},{l:'Clothing',c:'#1d4ed8',v:28},{l:'Footwear',c:'#059669',v:16},{l:'Beauty',c:'#db2777',v:8},{l:'Home',c:'#0891b2',v:5},{l:'Others',c:'#d97706',v:6}];
+  document.getElementById('cat-legend').innerHTML=cats.map(c=>`<div class="dl-row"><div class="dl-dot" style="background:${c.c}"></div><span class="dl-name">${c.l}</span><span class="dl-pct">${c.v}%</span></div>`).join('');
+  const cd=document.getElementById('catDonut');
+  if(!cd.dataset.rendered){cd.dataset.rendered=1;new Chart(cd.getContext('2d'),{type:'doughnut',data:{labels:cats.map(c=>c.l),datasets:[{data:cats.map(c=>c.v),backgroundColor:cats.map(c=>c.c),borderColor:'#fff',borderWidth:3,hoverOffset:5}]},options:{responsive:true,cutout:'68%',plugins:{legend:{display:false}}}});}
+}
+
+function switchChart(type,el){
+  currentChartType=type;
+  el.closest('.tabs-row').querySelectorAll('.trtab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderDashCharts();
+}
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+const PAGE_META={
+  dashboard:{h:'E-commerce Dashboard',p:'Overview · Sales · Orders · Analytics'},
+  orders:{h:'Order Management',p:'All categories · Track, process and manage orders'},
+  products:{h:'Product Management',p:'Clothing · Electronics · Footwear · Home · Beauty & more'},
+  categories:{h:'Category Management',p:'Manage product categories and sub-categories'},
+  inventory:{h:'Inventory Management',p:'Stock levels across all categories and warehouses'},
+  customers:{h:'Customer Management',p:'D2C self-onboarded customers · Segments · Behaviour'},
+  analytics:{h:'Sales Analytics',p:'Revenue · Conversion · Funnels · Regional performance'},
+  payments:{h:'Payment Management',p:'Transactions · Settlements · Gateway performance'},
+  shipping:{h:'Shipping & Logistics',p:'Deliveries · Couriers · Tracking · Zone analytics'},
+  returns:{h:'Returns & Refunds',p:'Return requests · Refund processing · Resolution'},
+  coupons:{h:'Coupons & Promotions',p:'Discount codes · Flash sales · Offers management'},
+  reviews:{h:'Reviews & Ratings',p:'Customer product reviews · Moderation · Analytics'},
+  support:{h:'Customer Support',p:'Tickets · Live chat · CSAT · Resolution analytics'},
+  employees:{h:'Employee Management',p:'All staff · Departments · HR records · Access control'},
+  rbac:{h:'Roles & Permissions (RBAC)',p:'Role-based access control · Permission matrix · Policy management'},
+  audit:{h:'Audit Logs',p:'Complete activity trail · All admin and employee actions'},
+  settings:{h:'Platform Settings',p:'Store configuration · Gateways · Security · Integrations'},
+};
+
+const rendered={};
+
+function navigate(section){
+  document.querySelectorAll('.snav-item').forEach(i=>i.classList.toggle('active',i.dataset.section===section));
+  document.querySelectorAll('.nav-link[data-section]').forEach(i=>i.classList.toggle('active',i.dataset.section===section));
+  document.querySelectorAll('.nav-sub-link[data-section]').forEach(i=>i.classList.toggle('active',i.dataset.section===section));
+  document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
+  const sec=document.getElementById('sec-'+section);
+  if(sec)sec.classList.add('active');
+  const meta=PAGE_META[section]||{h:section,p:''};
+  document.getElementById('pg-h').textContent=meta.h;
+  document.getElementById('pg-p').textContent=meta.p;
+
+  if(!rendered[section]){
+    rendered[section]=true;
+    const fn={orders:renderOrdersTable,products:renderProductsTable,categories:renderCategories,inventory:renderInventory,customers:renderCustomers,analytics:renderAnalytics,payments:renderPayments,shipping:renderShipping,returns:renderReturns,coupons:renderCoupons,reviews:renderReviews,support:renderSupport,employees:renderEmployees,rbac:renderRBAC,audit:renderAuditLogs};
+    if(fn[section])fn[section]();
+  }
+}
+
+document.querySelectorAll('[data-section]').forEach(el=>{el.addEventListener('click',e=>{e.preventDefault();navigate(el.dataset.section);});});
+
+document.querySelectorAll('.nav-link.has-sub').forEach(link=>{link.addEventListener('click',e=>{e.preventDefault();link.classList.toggle('open');link.nextElementSibling.classList.toggle('open');});});
+
+document.getElementById('rbac-role-select')&&document.getElementById('rbac-role-select').addEventListener('change',function(){renderRBACMatrix(this.value);});
+
+// Notifications
+document.getElementById('notifBtn').addEventListener('click',e=>{e.stopPropagation();document.getElementById('notifPanel').classList.toggle('open');});
+document.addEventListener('click',()=>document.getElementById('notifPanel').classList.remove('open'));
+document.getElementById('notifPanel').addEventListener('click',e=>e.stopPropagation());
+
+// Modals
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(m=>{m.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});});
+
+// Refresh
+document.getElementById('refreshBtn').addEventListener('click',function(){
+  const ic=document.getElementById('ri');ic.classList.add('fa-spin');
+  setTimeout(()=>{ic.classList.remove('fa-spin');showToast('Dashboard refreshed successfully','success');},900);
+});
+
+// Date range
+function setRange(el){el.closest('.tabs-row').querySelectorAll('.trtab').forEach(t=>t.classList.remove('active'));el.classList.add('active');}
+
+// Toast
+function showToast(msg,type='success'){
+  const w=document.getElementById('toastWrap');
+  const t=document.createElement('div');
+  t.style.cssText=`background:#fff;border:1px solid ${type==='success'?'#d1fae5':type==='error'?'#fecaca':'#fde68a'};color:#0d1117;padding:10px 14px;border-radius:9px;font-size:12px;box-shadow:0 6px 20px rgba(0,0,0,.12);display:flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;min-width:220px;animation:fadeIn .2s ease;`;
+  t.innerHTML=`<i class="fas fa-check-circle" style="color:${type==='success'?'#059669':type==='error'?'#dc2626':'#d97706'};font-size:13px;"></i>${msg}`;
+  w.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(4px)';t.style.transition='all .25s';setTimeout(()=>t.remove(),250);},3000);
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  renderDashKpis();
+  renderRecentOrders();
+  renderTopProducts();
+  renderTopLocations();
+  renderCustStats();
+  renderFinanceRetailers();
+  renderNotifications();
+  renderDashCharts();
+  rendered['dashboard']=true;
+  setTimeout(()=>showToast('Platform loaded · All systems operational','success'),800);
+});
+</script>
+</body>
+</html>
